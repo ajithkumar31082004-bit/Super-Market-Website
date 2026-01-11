@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - SuperMarket Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .checkout-step {
+            position: relative;
+            padding-left: 30px;
+        }
+        .checkout-step.active:before {
+            background-color: #16a34a;
+            border-color: #16a34a;
+        }
+        .checkout-step.completed:before {
+            background-color: #16a34a;
+            border-color: #16a34a;
+            content: '✓';
+            color: white;
+            text-align: center;
+            line-height: 24px;
+        }
+        .checkout-step:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 24px;
+            height: 24px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            background-color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center space-x-3">
+                    <div class="bg-green-600 text-white p-2 rounded-lg">
+                        <i class="fas fa-shopping-cart text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">Super<span class="text-green-600">Market</span>Pro</h1>
+                    </div>
+                </a>
+
+                <!-- Checkout Steps -->
+                <div class="hidden md:flex space-x-8">
+                    <div class="checkout-step active">
+                        <span class="font-semibold">1. Cart</span>
+                    </div>
+                    <div class="checkout-step active">
+                        <span class="font-semibold">2. Information</span>
+                    </div>
+                    <div class="checkout-step">
+                        <span class="text-gray-500">3. Payment</span>
+                    </div>
+                    <div class="checkout-step">
+                        <span class="text-gray-500">4. Confirmation</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Checkout Content -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Checkout Form -->
+            <div class="lg:w-2/3">
+                <div class="bg-white rounded-xl shadow p-6 mb-6">
+                    <h2 class="text-2xl font-bold mb-6">Delivery Information</h2>
+                    
+                    <form id="checkoutForm" class="space-y-6">
+                        <!-- Contact Information -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4">Contact Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block mb-2">First Name *</label>
+                                    <input type="text" required class="w-full p-3 border rounded-lg">
+                                </div>
+                                <div>
+                                    <label class="block mb-2">Last Name *</label>
+                                    <input type="text" required class="w-full p-3 border rounded-lg">
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <label class="block mb-2">Email *</label>
+                                <input type="email" required class="w-full p-3 border rounded-lg">
+                            </div>
+                            <div class="mt-4">
+                                <label class="block mb-2">Phone Number *</label>
+                                <input type="tel" required class="w-full p-3 border rounded-lg">
+                            </div>
+                        </div>
+                        
+                        <!-- Delivery Address -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4">Delivery Address</h3>
+                            <div>
+                                <label class="block mb-2">Address *</label>
+                                <input type="text" required class="w-full p-3 border rounded-lg" placeholder="Street address">
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                                <div>
+                                    <label class="block mb-2">City *</label>
+                                    <input type="text" required class="w-full p-3 border rounded-lg">
+                                </div>
+                                <div>
+                                    <label class="block mb-2">State *</label>
+                                    <input type="text" required class="w-full p-3 border rounded-lg">
+                                </div>
+                                <div>
+                                    <label class="block mb-2">PIN Code *</label>
+                                    <input type="text" required class="w-full p-3 border rounded-lg">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Delivery Time -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4">Delivery Time</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block mb-2">Delivery Date *</label>
+                                    <input type="date" required class="w-full p-3 border rounded-lg">
+                                </div>
+                                <div>
+                                    <label class="block mb-2">Time Slot *</label>
+                                    <select class="w-full p-3 border rounded-lg">
+                                        <option>9:00 AM - 12:00 PM</option>
+                                        <option>12:00 PM - 3:00 PM</option>
+                                        <option>3:00 PM - 6:00 PM</option>
+                                        <option>6:00 PM - 9:00 PM</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Special Instructions -->
+                        <div>
+                            <label class="block mb-2">Special Instructions (Optional)</label>
+                            <textarea rows="3" class="w-full p-3 border rounded-lg" 
+                                      placeholder="Delivery instructions, gate code, etc."></textarea>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Payment Method -->
+                <div class="bg-white rounded-xl shadow p-6">
+                    <h2 class="text-2xl font-bold mb-6">Payment Method</h2>
+                    
+                    <div class="space-y-4">
+                        <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                            <input type="radio" name="payment" value="cod" checked class="mr-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-money-bill-wave text-2xl text-green-600 mr-3"></i>
+                                <div>
+                                    <div class="font-semibold">Cash on Delivery</div>
+                                    <div class="text-sm text-gray-600">Pay when you receive your order</div>
+                                </div>
+                            </div>
+                        </label>
+                        
+                        <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                            <input type="radio" name="payment" value="card" class="mr-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-credit-card text-2xl text-blue-600 mr-3"></i>
+                                <div>
+                                    <div class="font-semibold">Credit/Debit Card</div>
+                                    <div class="text-sm text-gray-600">Pay with your card</div>
+                                </div>
+                            </div>
+                        </label>
+                        
+                        <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                            <input type="radio" name="payment" value="upi" class="mr-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-mobile-alt text-2xl text-purple-600 mr-3"></i>
+                                <div>
+                                    <div class="font-semibold">UPI</div>
+                                    <div class="text-sm text-gray-600">Pay using UPI apps</div>
+                                </div>
+                            </div>
+                        </label>
+                        
+                        <label class="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+                            <input type="radio" name="payment" value="wallet" class="mr-4">
+                            <div class="flex items-center">
+                                <i class="fas fa-wallet text-2xl text-yellow-600 mr-3"></i>
+                                <div>
+                                    <div class="font-semibold">Digital Wallet</div>
+                                    <div class="text-sm text-gray-600">Paytm, PhonePe, etc.</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <!-- Card Details (hidden by default) -->
+                    <div id="cardDetails" class="mt-6 hidden">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block mb-2">Card Number</label>
+                                <input type="text" class="w-full p-3 border rounded-lg" placeholder="1234 5678 9012 3456">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block mb-2">Expiry Date</label>
+                                    <input type="text" class="w-full p-3 border rounded-lg" placeholder="MM/YY">
+                                </div>
+                                <div>
+                                    <label class="block mb-2">CVV</label>
+                                    <input type="text" class="w-full p-3 border rounded-lg" placeholder="123">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="lg:w-1/3">
+                <div class="bg-white rounded-xl shadow p-6 sticky top-24">
+                    <h2 class="text-xl font-bold mb-6">Order Summary</h2>
+                    
+                    <!-- Order Items -->
+                    <div id="orderItems" class="space-y-4 mb-6 max-h-64 overflow-y-auto">
+                        <!-- Items will load here -->
+                    </div>
+                    
+                    <!-- Price Breakdown -->
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Subtotal</span>
+                            <span id="summarySubtotal" class="font-semibold">₹0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Delivery Fee</span>
+                            <span id="summaryDelivery" class="font-semibold">₹40</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Tax (5%)</span>
+                            <span id="summaryTax" class="font-semibold">₹0</span>
+                        </div>
+                        <div class="border-t pt-3">
+                            <div class="flex justify-between text-lg font-bold">
+                                <span>Total</span>
+                                <span id="summaryTotal">₹0</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Terms -->
+                    <div class="mb-6">
+                        <label class="flex items-start">
+                            <input type="checkbox" required class="mr-3 mt-1">
+                            <span class="text-sm">
+                                I agree to the <a href="#" class="text-green-600">Terms & Conditions</a> and 
+                                confirm that my delivery information is correct.
+                            </span>
+                        </label>
+                    </div>
+                    
+                    <!-- Complete Order Button -->
+                    <button onclick="completeOrder()" 
+                            class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-green-700">
+                        <i class="fas fa-lock mr-2"></i>Complete Order
+                    </button>
+                    
+                    <!-- Security Note -->
+                    <div class="mt-6 pt-6 border-t text-center text-sm text-gray-500">
+                        <i class="fas fa-shield-alt text-green-600 mr-2"></i>
+                        Secure SSL Encrypted Payment
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load order summary
+        function loadOrderSummary() {
+            const orderSummary = JSON.parse(localStorage.getItem('orderSummary'));
+            if (!orderSummary) {
+                alert('No items in cart!');
+                window.location.href = 'cart.html';
+                return;
+            }
+            
+            // Update summary
+            document.getElementById('summarySubtotal').textContent = `₹${orderSummary.subtotal.toFixed(2)}`;
+            document.getElementById('summaryDelivery').textContent = `₹${orderSummary.deliveryFee.toFixed(2)}`;
+            document.getElementById('summaryTax').textContent = `₹${orderSummary.tax.toFixed(2)}`;
+            document.getElementById('summaryTotal').textContent = `₹${orderSummary.total.toFixed(2)}`;
+            
+            // Load order items
+            const container = document.getElementById('orderItems');
+            container.innerHTML = '';
+            
+            orderSummary.items.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-start';
+                div.innerHTML = `
+                    <div class="flex items-center">
+                        <img src="${item.image || 'https://via.placeholder.com/50'}" 
+                             alt="${item.name}" 
+                             class="w-12 h-12 rounded mr-3">
+                        <div>
+                            <div class="font-semibold">${item.name}</div>
+                            <div class="text-sm text-gray-600">Qty: ${item.quantity}</div>
+                        </div>
+                    </div>
+                    <div class="font-semibold">₹${(item.price * item.quantity).toFixed(2)}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+        
+        // Show/hide card details
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOrderSummary();
+            
+            const paymentRadios = document.querySelectorAll('input[name="payment"]');
+            const cardDetails = document.getElementById('cardDetails');
+            
+            paymentRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.value === 'card') {
+                        cardDetails.classList.remove('hidden');
+                    } else {
+                        cardDetails.classList.add('hidden');
+                    }
+                });
+            });
+        });
+        
+        // Complete order
+        function completeOrder() {
+            const checkoutForm = document.getElementById('checkoutForm');
+            if (!checkoutForm.checkValidity()) {
+                alert('Please fill in all required fields');
+                checkoutForm.reportValidity();
+                return;
+            }
+            
+            // Get form data
+            const formData = new FormData(checkoutForm);
+            const orderData = {
+                customerInfo: Object.fromEntries(formData),
+                paymentMethod: document.querySelector('input[name="payment"]:checked').value,
+                orderSummary: JSON.parse(localStorage.getItem('orderSummary')),
+                orderDate: new Date().toISOString(),
+                orderId: 'ORD-' + Date.now(),
+                status: 'Processing'
+            };
+            
+            // Save order
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            orders.push(orderData);
+            localStorage.setItem('orders', JSON.stringify(orders));
+            
+            // Clear cart
+            localStorage.removeItem('cart');
+            localStorage.removeItem('orderSummary');
+            
+            // Redirect to confirmation/billing page
+            window.location.href = 'billing.html?order=' + orderData.orderId;
+        }
+    </script>
+</body>
+</html>

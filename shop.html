@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - SuperMarket Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .product-image {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+        .quick-view-btn {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .product-card:hover .quick-view-btn {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header (Same as index.html) -->
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <a href="index.html" class="flex items-center space-x-3">
+                        <div class="bg-green-600 text-white p-2 rounded-lg">
+                            <i class="fas fa-shopping-cart text-2xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-900">Super<span class="text-green-600">Market</span>Pro</h1>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Right Side -->
+                <div class="flex items-center space-x-6">
+                    <a href="cart.html" class="relative">
+                        <i class="fas fa-shopping-cart text-2xl text-gray-700 hover:text-green-600"></i>
+                        <span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                    </a>
+                    <a href="login.html" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Shop Content -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Sidebar Filters -->
+            <div class="lg:w-1/4">
+                <div class="bg-white rounded-xl shadow p-6 sticky top-24">
+                    <!-- Search -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-bold mb-3">Search Products</h3>
+                        <div class="relative">
+                            <input type="text" 
+                                   id="searchInput" 
+                                   placeholder="Search products..." 
+                                   class="w-full pl-10 pr-4 py-2 border rounded-lg">
+                            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                        </div>
+                    </div>
+
+                    <!-- Categories -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-bold mb-3">Categories</h3>
+                        <div class="space-y-2" id="categoryFilter">
+                            <!-- Categories will load here -->
+                        </div>
+                    </div>
+
+                    <!-- Price Filter -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-bold mb-3">Price Range</h3>
+                        <div class="space-y-2">
+                            <input type="range" min="0" max="1000" value="1000" class="w-full" id="priceRange">
+                            <div class="flex justify-between text-sm">
+                                <span>₹0</span>
+                                <span id="priceValue">₹1000</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sort -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-bold mb-3">Sort By</h3>
+                        <select id="sortSelect" class="w-full border rounded-lg p-2">
+                            <option value="popular">Most Popular</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                            <option value="newest">Newest First</option>
+                        </select>
+                    </div>
+
+                    <button onclick="applyFilters()" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700">
+                        Apply Filters
+                    </button>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="lg:w-3/4">
+                <!-- Page Header -->
+                <div class="bg-white rounded-xl shadow p-6 mb-6">
+                    <h1 class="text-3xl font-bold mb-2">All Products</h1>
+                    <p class="text-gray-600">Browse our collection of fresh groceries</p>
+                </div>
+
+                <!-- Products Grid -->
+                <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Products will load here -->
+                </div>
+
+                <!-- Pagination -->
+                <div class="mt-12 flex justify-center">
+                    <nav class="flex items-center space-x-2">
+                        <button class="px-4 py-2 border rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="px-4 py-2 border rounded-lg bg-green-600 text-white">1</button>
+                        <button class="px-4 py-2 border rounded-lg hover:bg-gray-100">2</button>
+                        <button class="px-4 py-2 border rounded-lg hover:bg-gray-100">3</button>
+                        <button class="px-4 py-2 border rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick View Modal -->
+    <div id="quickViewModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-auto">
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-6">
+                        <h2 class="text-2xl font-bold">Quick View</h2>
+                        <button onclick="closeQuickView()" class="text-2xl">&times;</button>
+                    </div>
+                    <div id="quickViewContent">
+                        <!-- Content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+    // Global variables
+    let allProducts = [];
+    let filteredProducts = [];
+
+    // Initialize shop page
+    document.addEventListener('DOMContentLoaded', async function() {
+        try {
+            // Load products
+            allProducts = await products.getAllProducts();
+            filteredProducts = [...allProducts];
+            
+            // Display products
+            await displayProducts(allProducts.slice(0, 18));
+            
+            // Load categories
+            await loadCategories();
+            
+            // Update cart count
+            cart.updateCartCount();
+            
+            // Setup event listeners
+            setupEventListeners();
+            
+        } catch (error) {
+            console.error('Error initializing shop:', error);
+            document.getElementById('productsGrid').innerHTML = 
+                '<div class="text-center py-12 text-red-500">Error loading products. Please refresh the page.</div>';
+        }
+    });
+
+    // Display products
+    async function displayProducts(productsToShow) {
+        const container = document.getElementById('productsGrid');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        if (productsToShow.length === 0) {
+            container.innerHTML = '<div class="col-span-full text-center py-12 text-gray-500">No products found</div>';
+            return;
+        }
+        
+        productsToShow.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card bg-white rounded-xl shadow overflow-hidden relative';
+            productCard.innerHTML = `
+                <div class="relative">
+                    <img src="${product.image}" 
+                         alt="${product.name}" 
+                         class="product-image">
+                    ${product.discount ? `
+                        <span class="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded text-sm">
+                            -${product.discount}%
+                        </span>
+                    ` : ''}
+                    <button onclick="quickView(${product.id})" 
+                            class="quick-view-btn bg-green-600 text-white px-4 py-2 rounded-lg font-semibold">
+                        Quick View
+                    </button>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-semibold text-lg mb-2">${product.name}</h3>
+                    <p class="text-gray-600 text-sm mb-3">${(product.description || '').substring(0, 60)}...</p>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="text-green-600 font-bold text-xl">₹${product.price}</span>
+                            ${product.originalPrice ? `
+                                <span class="text-gray-500 line-through text-sm ml-2">₹${product.originalPrice}</span>
+                            ` : ''}
+                            <div class="text-sm text-gray-500">${product.unit || 'piece'}</div>
+                        </div>
+                        <button onclick="addProductToCart(${product.id})" 
+                                class="bg-green-100 text-green-700 px-4 py-2 rounded-lg font-semibold hover:bg-green-200">
+                            <i class="fas fa-cart-plus mr-2"></i>Add
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(productCard);
+        });
+    }
+
+    // Load categories for filter
+    async function loadCategories() {
+        const categories = await products.getCategories();
+        const container = document.getElementById('categoryFilter');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        categories.forEach(category => {
+            const div = document.createElement('div');
+            div.className = 'flex items-center justify-between p-2 hover:bg-gray-50 rounded cursor-pointer';
+            div.innerHTML = `
+                <label class="flex items-center cursor-pointer w-full">
+                    <input type="checkbox" value="${category.name}" class="mr-2 category-checkbox">
+                    <span>${category.name}</span>
+                </label>
+                <span class="text-gray-500 text-sm">${category.count}</span>
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    // Setup event listeners
+    function setupEventListeners() {
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', applyFilters);
+        }
+        
+        // Sort functionality
+        const sortSelect = document.getElementById('sortSelect');
+        if (sortSelect) {
+            sortSelect.addEventListener('change', applyFilters);
+        }
+        
+        // Price range
+        const priceRange = document.getElementById('priceRange');
+        if (priceRange) {
+            priceRange.addEventListener('input', function() {
+                document.getElementById('priceValue').textContent = '₹' + this.value;
+                applyFilters();
+            });
+        }
+        
+        // Category filter
+        document.addEventListener('change', function(e) {
+            if (e.target.classList.contains('category-checkbox')) {
+                applyFilters();
+            }
+        });
+    }
+
+    // Apply filters
+    async function applyFilters() {
+        const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
+        const maxPrice = parseInt(document.getElementById('priceRange')?.value || 1000);
+        const sortBy = document.getElementById('sortSelect')?.value || 'popular';
+        
+        // Get selected categories
+        const selectedCategories = Array.from(document.querySelectorAll('.category-checkbox:checked'))
+            .map(cb => cb.value);
+        
+        // Apply filters
+        filteredProducts = allProducts.filter(product => {
+            const matchesSearch = product.name.toLowerCase().includes(searchTerm) ||
+                                 (product.description && product.description.toLowerCase().includes(searchTerm));
+            const matchesPrice = product.price <= maxPrice;
+            const matchesCategory = selectedCategories.length === 0 || 
+                                   selectedCategories.includes(product.category);
+            
+            return matchesSearch && matchesPrice && matchesCategory;
+        });
+        
+        // Apply sorting
+        filteredProducts = products.sortProducts(filteredProducts, sortBy);
+        
+        // Display filtered products
+        await displayProducts(filteredProducts.slice(0, 18));
+    }
+
+    // Quick view function
+    async function quickView(productId) {
+        const product = await products.getProductById(productId);
+        if (!product) return;
+        
+        const modal = document.getElementById('quickViewModal');
+        const content = document.getElementById('quickViewContent');
+        
+        content.innerHTML = `
+            <div class="flex flex-col md:flex-row gap-8">
+                <div class="md:w-1/2">
+                    <img src="${product.image}" alt="${product.name}" class="w-full rounded-lg">
+                </div>
+                <div class="md:w-1/2">
+                    <h3 class="text-2xl font-bold mb-2">${product.name}</h3>
+                    <p class="text-gray-600 mb-4">${product.description}</p>
+                    
+                    <div class="flex items-center mb-4">
+                        ${Array.from({length: 5}).map((_, i) => `
+                            <i class="fas fa-star ${i < Math.floor(product.rating || 0) ? 'text-yellow-400' : 'text-gray-300'}"></i>
+                        `).join('')}
+                        <span class="text-gray-600 ml-2">(${product.reviews || 0} reviews)</span>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <span class="text-green-600 font-bold text-3xl">₹${product.price}</span>
+                        ${product.originalPrice ? `
+                            <span class="text-gray-500 line-through text-lg ml-2">₹${product.originalPrice}</span>
+                            <span class="ml-2 bg-red-100 text-red-800 px-2 py-1 rounded text-sm">Save ${product.discount}%</span>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block mb-2 font-semibold">Quantity</label>
+                        <div class="flex items-center">
+                            <button onclick="updateQuickViewQuantity('decrease')" 
+                                    class="px-4 py-2 border rounded-l-lg hover:bg-gray-100">-</button>
+                            <input type="number" value="1" min="1" max="10" 
+                                   class="w-20 text-center py-2 border-y" id="quickViewQty">
+                            <button onclick="updateQuickViewQuantity('increase')" 
+                                    class="px-4 py-2 border rounded-r-lg hover:bg-gray-100">+</button>
+                        </div>
+                        <div class="text-sm text-gray-500 mt-2">
+                            ${product.stock} units available
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-4">
+                        <button onclick="addProductToCart(${product.id}, document.getElementById('quickViewQty').value)" 
+                                class="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700">
+                            <i class="fas fa-cart-plus mr-2"></i>Add to Cart
+                        </button>
+                        <a href="billing.html?product=${product.id}" 
+                           class="flex-1 bg-yellow-500 text-white py-3 rounded-lg font-semibold text-center hover:bg-yellow-600">
+                            <i class="fas fa-bolt mr-2"></i>Buy Now
+                        </a>
+                    </div>
+                    
+                    <div class="mt-6 pt-6 border-t">
+                        <h4 class="font-semibold mb-2">Product Details</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>Category: ${product.category}</li>
+                            <li>Unit: ${product.unit || 'piece'}</li>
+                            <li>Stock: ${product.stock} units</li>
+                            ${product.tags ? `
+                                <li>Tags: ${product.tags.join(', ')}</li>
+                            ` : ''}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        modal.classList.remove('hidden');
+    }
+
+    // Close quick view
+    function closeQuickView() {
+        document.getElementById('quickViewModal').classList.add('hidden');
+    }
+
+    // Update quick view quantity
+    function updateQuickViewQuantity(action) {
+        const input = document.getElementById('quickViewQty');
+        let value = parseInt(input.value);
+        
+        if (action === 'increase' && value < 10) {
+            input.value = value + 1;
+        } else if (action === 'decrease' && value > 1) {
+            input.value = value - 1;
+        }
+    }
+
+    // Add product to cart
+    async function addProductToCart(productId, quantity = 1) {
+        await cart.addItem(productId, quantity);
+        closeQuickView();
+    }
+
+    // Update cart count
+    function updateCartCount() {
+        cart.updateCartCount();
+    }
+</script>
+</body>
+</html>

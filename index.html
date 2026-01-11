@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperMarket Pro - Fresh Groceries Delivered</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, #16a34a 0%, #059669 100%);
+        }
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="bg-green-600 text-white p-2 rounded-lg">
+                        <i class="fas fa-shopping-cart text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">Super<span class="text-green-600">Market</span>Pro</h1>
+                        <p class="text-sm text-gray-600">Fresh Groceries Delivered</p>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-green-600 font-semibold flex items-center space-x-2">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="shop.html" class="text-gray-700 hover:text-green-600 flex items-center space-x-2">
+                        <i class="fas fa-store"></i>
+                        <span>Shop</span>
+                    </a>
+                    <a href="#categories" class="text-gray-700 hover:text-green-600 flex items-center space-x-2">
+                        <i class="fas fa-th-large"></i>
+                        <span>Categories</span>
+                    </a>
+                    <a href="#deals" class="text-gray-700 hover:text-green-600 flex items-center space-x-2">
+                        <i class="fas fa-tag"></i>
+                        <span>Deals</span>
+                    </a>
+                    <a href="order-history.html" class="text-gray-700 hover:text-green-600 flex items-center space-x-2">
+                        <i class="fas fa-history"></i>
+                        <span>Orders</span>
+                    </a>
+                </nav>
+
+                <!-- Right Side -->
+                <div class="flex items-center space-x-6">
+                    <!-- Search -->
+                    <div class="relative hidden md:block">
+                        <input type="text" placeholder="Search products..." 
+                               class="pl-10 pr-4 py-2 border rounded-full focus:outline-none focus:border-green-500">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+
+                    <!-- Cart -->
+                    <a href="cart.html" class="relative">
+                        <i class="fas fa-shopping-cart text-2xl text-gray-700 hover:text-green-600"></i>
+                        <span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                    </a>
+
+                    <!-- User -->
+                    <div class="relative group">
+                        <button class="flex items-center space-x-2">
+                            <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-green-600"></i>
+                            </div>
+                            <i class="fas fa-chevron-down text-sm text-gray-600"></i>
+                        </button>
+                        <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg hidden group-hover:block">
+                            <a href="login.html" class="block px-4 py-3 hover:bg-gray-100">
+                                <i class="fas fa-sign-in-alt mr-2"></i>Login
+                            </a>
+                            <a href="admin.html" class="block px-4 py-3 hover:bg-gray-100">
+                                <i class="fas fa-cog mr-2"></i>Admin
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div class="md:hidden mt-4">
+                <div class="flex space-x-4 overflow-x-auto">
+                    <a href="index.html" class="whitespace-nowrap px-3 py-2 bg-green-100 text-green-700 rounded-lg">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="shop.html" class="whitespace-nowrap px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                        <i class="fas fa-store mr-2"></i>Shop
+                    </a>
+                    <a href="#categories" class="whitespace-nowrap px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">
+                        <i class="fas fa-th-large mr-2"></i>Categories
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-12 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                        Fresh Groceries<br>
+                        <span class="text-yellow-300">Delivered to Your Doorstep</span>
+                    </h1>
+                    <p class="text-xl mb-8 opacity-90">
+                        Shop from 1000+ products including fresh vegetables, dairy, snacks, and more. 
+                        Same-day delivery available!
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="shop.html" 
+                           class="bg-white text-green-700 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                            <i class="fas fa-shopping-basket mr-2"></i>Start Shopping
+                        </a>
+                        <a href="#deals" 
+                           class="bg-transparent border-2 border-white px-8 py-3 rounded-lg font-semibold hover:bg-white/10 transition">
+                            <i class="fas fa-tag mr-2"></i>View Deals
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         alt="Grocery Shopping" 
+                         class="rounded-2xl shadow-2xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center p-6">
+                    <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shipping-fast text-3xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Fast Delivery</h3>
+                    <p class="text-gray-600">Same-day delivery within 2 hours in select areas.</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-leaf text-3xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Fresh Quality</h3>
+                    <p class="text-gray-600">100% fresh products with quality guarantee.</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-rupee-sign text-3xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Best Prices</h3>
+                    <p class="text-gray-600">Competitive prices with regular discounts.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section id="categories" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Shop by Category</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                <!-- Category Cards -->
+                <a href="shop.html?category=fruits" class="category-card bg-white rounded-xl p-6 text-center shadow hover:shadow-xl transition">
+                    <div class="bg-green-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-apple-alt text-3xl text-green-600"></i>
+                    </div>
+                    <h3 class="font-semibold">Fruits</h3>
+                    <p class="text-sm text-gray-500">Fresh & Organic</p>
+                </a>
+                <a href="shop.html?category=vegetables" class="category-card bg-white rounded-xl p-6 text-center shadow hover:shadow-xl transition">
+                    <div class="bg-green-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-carrot text-3xl text-green-600"></i>
+                    </div>
+                    <h3 class="font-semibold">Vegetables</h3>
+                    <p class="text-sm text-gray-500">Farm Fresh</p>
+                </a>
+                <a href="shop.html?category=dairy" class="category-card bg-white rounded-xl p-6 text-center shadow hover:shadow-xl transition">
+                    <div class="bg-green-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-cheese text-3xl text-green-600"></i>
+                    </div>
+                    <h3 class="font-semibold">Dairy</h3>
+                    <p class="text-sm text-gray-500">Milk, Cheese & Eggs</p>
+                </a>
+                <a href="shop.html?category=beverages" class="category-card bg-white rounded-xl p-6 text-center shadow hover:shadow-xl transition">
+                    <div class="bg-green-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-wine-bottle text-3xl text-green-600"></i>
+                    </div>
+                    <h3 class="font-semibold">Beverages</h3>
+                    <p class="text-sm text-gray-500">Juices & Drinks</p>
+                </a>
+                <a href="shop.html?category=snacks" class="category-card bg-white rounded-xl p-6 text-center shadow hover:shadow-xl transition">
+                    <div class="bg-green-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-cookie text-3xl text-green-600"></i>
+                    </div>
+                    <h3 class="font-semibold">Snacks</h3>
+                    <p class="text-sm text-gray-500">Chips & Cookies</p>
+                </a>
+                <a href="shop.html?category=meat" class="category-card bg-white rounded-xl p-6 text-center shadow hover:shadow-xl transition">
+                    <div class="bg-green-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-drumstick-bite text-3xl text-green-600"></i>
+                    </div>
+                    <h3 class="font-semibold">Meat</h3>
+                    <p class="text-sm text-gray-500">Chicken & Fish</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center mb-10">
+                <h2 class="text-3xl font-bold">Featured Products</h2>
+                <a href="shop.html" class="text-green-600 font-semibold hover:underline">
+                    View All <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+            <div id="featuredProducts" class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <!-- Featured products will load here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Deals Banner -->
+    <section id="deals" class="py-16 bg-gradient-to-r from-red-500 to-orange-500 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-4">Weekend Special!</h2>
+            <p class="text-2xl mb-8">Get 30% OFF on all fresh vegetables</p>
+            <div class="flex items-center justify-center space-x-4 mb-8">
+                <div class="bg-white/20 p-4 rounded-lg">
+                    <span class="text-3xl font-bold" id="dealHours">24</span>
+                    <p class="text-sm">Hours</p>
+                </div>
+                <span class="text-2xl">:</span>
+                <div class="bg-white/20 p-4 rounded-lg">
+                    <span class="text-3xl font-bold" id="dealMinutes">60</span>
+                    <p class="text-sm">Minutes</p>
+                </div>
+                <span class="text-2xl">:</span>
+                <div class="bg-white/20 p-4 rounded-lg">
+                    <span class="text-3xl font-bold" id="dealSeconds">60</span>
+                    <p class="text-sm">Seconds</p>
+                </div>
+            </div>
+            <a href="shop.html" class="bg-white text-red-600 px-8 py-3 rounded-lg font-bold text-lg hover:bg-gray-100 transition">
+                <i class="fas fa-bolt mr-2"></i>Shop Now
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">Super<span class="text-green-400">Market</span>Pro</h3>
+                    <p class="text-gray-400">Your one-stop shop for fresh groceries and daily needs.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="shop.html" class="text-gray-400 hover:text-white">Shop</a></li>
+                        <li><a href="cart.html" class="text-gray-400 hover:text-white">Cart</a></li>
+                        <li><a href="login.html" class="text-gray-400 hover:text-white">Login</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><i class="fas fa-map-marker-alt mr-2"></i>123 Main St, Chennai</li>
+                        <li><i class="fas fa-phone mr-2"></i>+91 9876543210</li>
+                        <li><i class="fas fa-envelope mr-2"></i>support@supermarket.com</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Newsletter</h4>
+                    <p class="text-gray-400 mb-4">Subscribe for updates</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Your email" class="flex-grow px-4 py-2 text-gray-900 rounded-l-lg">
+                        <button class="bg-green-600 px-4 rounded-r-lg">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 SuperMarketPro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/cart.js"></script>
+    <script src="js/products.js"></script>
+    <script>
+        // Update cart count
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = totalItems;
+        }
+
+        // Load featured products
+        async function loadFeaturedProducts() {
+            try {
+                const response = await fetch('data/products.json');
+                const data = await response.json();
+                const featured = data.products.filter(p => p.featured).slice(0, 8);
+                
+                const container = document.getElementById('featuredProducts');
+                container.innerHTML = '';
+                
+                featured.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden';
+                    productCard.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h4 class="font-semibold text-lg mb-2">${product.name}</h4>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <span class="text-green-600 font-bold text-xl">₹${product.price}</span>
+                                    ${product.originalPrice ? `
+                                        <span class="text-gray-500 line-through text-sm ml-2">₹${product.originalPrice}</span>
+                                    ` : ''}
+                                </div>
+                                <button onclick="addToCart(${product.id})" 
+                                        class="bg-green-100 text-green-700 px-3 py-1 rounded-lg hover:bg-green-200">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(productCard);
+                });
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
+        }
+
+        // Countdown timer
+        function updateCountdown() {
+            const now = new Date();
+            const endOfDay = new Date();
+            endOfDay.setHours(23, 59, 59, 999);
+            
+            const diff = endOfDay - now;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('dealHours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('dealMinutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('dealSeconds').textContent = seconds.toString().padStart(2, '0');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+            loadFeaturedProducts();
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        });
+
+        // Add to cart function
+        function addToCart(productId) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: productId,
+                    quantity: 1,
+                    name: 'Product ' + productId,
+                    price: 100,
+                    image: 'https://via.placeholder.com/150'
+                });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            
+            // Show notification
+            alert('Product added to cart!');
+        }
+    </script>
+    <script>
+    // Initialize
+    document.addEventListener('DOMContentLoaded', async function() {
+        try {
+            updateCartCount();
+            await loadFeaturedProducts();
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+            
+            // Setup add to cart buttons
+            setupAddToCartButtons();
+            
+        } catch (error) {
+            console.error('Error initializing:', error);
+        }
+    });
+
+    // Update cart count
+    function updateCartCount() {
+        cart.updateCartCount();
+    }
+
+    // Load featured products
+    async function loadFeaturedProducts() {
+        try {
+            const featuredProducts = await products.getFeaturedProducts(8);
+            const container = document.getElementById('featuredProducts');
+            
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            featuredProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden';
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h4 class="font-semibold text-lg mb-2">${product.name}</h4>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-green-600 font-bold text-xl">₹${product.price}</span>
+                                ${product.originalPrice ? `
+                                    <span class="text-gray-500 line-through text-sm ml-2">₹${product.originalPrice}</span>
+                                ` : ''}
+                            </div>
+                            <button onclick="addToCartFromHome(${product.id})" 
+                                    class="bg-green-100 text-green-700 px-3 py-2 rounded-lg hover:bg-green-200">
+                                <i class="fas fa-plus mr-1"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(productCard);
+            });
+        } catch (error) {
+            console.error('Error loading featured products:', error);
+        }
+    }
+
+    // Countdown timer
+    function updateCountdown() {
+        const now = new Date();
+        const endOfDay = new Date();
+        endOfDay.setHours(23, 59, 59, 999);
+        
+        const diff = endOfDay - now;
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        const hoursEl = document.getElementById('dealHours');
+        const minutesEl = document.getElementById('dealMinutes');
+        const secondsEl = document.getElementById('dealSeconds');
+        
+        if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, '0');
+        if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
+        if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
+    }
+
+    // Setup add to cart buttons
+    function setupAddToCartButtons() {
+        // Add event listeners to all "Add to Cart" buttons
+        document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-product-id');
+                if (productId) {
+                    addToCartFromHome(productId);
+                }
+            });
+        });
+    }
+
+    // Add to cart from home page
+    async function addToCartFromHome(productId) {
+        try {
+            await cart.addItem(parseInt(productId), 1);
+            
+            // Show success message
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            notification.innerHTML = `
+                <i class="fas fa-check-circle mr-2"></i>
+                Product added to cart!
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 3000);
+            
+        } catch (error) {
+            console.error('Error adding to cart:', error);
+            
+            // Show error message
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            notification.innerHTML = `
+                <i class="fas fa-exclamation-circle mr-2"></i>
+                Error adding product to cart
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.remove();
+                }
+            }, 3000);
+        }
+    }
+</script>
+</body>
+</html>

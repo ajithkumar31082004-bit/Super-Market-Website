@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History - SuperMarket Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center space-x-3">
+                    <div class="bg-green-600 text-white p-2 rounded-lg">
+                        <i class="fas fa-shopping-cart text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">Super<span class="text-green-600">Market</span>Pro</h1>
+                    </div>
+                </a>
+
+                <!-- Navigation -->
+                <div class="flex items-center space-x-6">
+                    <a href="shop.html" class="text-gray-700 hover:text-green-600">
+                        <i class="fas fa-store mr-2"></i>Shop
+                    </a>
+                    <a href="cart.html" class="relative">
+                        <i class="fas fa-shopping-cart text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Order History -->
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8">Order History</h1>
+        
+        <!-- Filters -->
+        <div class="bg-white rounded-xl shadow p-6 mb-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex space-x-4">
+                    <select class="p-3 border rounded-lg">
+                        <option>All Orders</option>
+                        <option>Past 30 Days</option>
+                        <option>Past 3 Months</option>
+                        <option>2024</option>
+                    </select>
+                    <select class="p-3 border rounded-lg">
+                        <option>All Status</option>
+                        <option>Processing</option>
+                        <option>Delivered</option>
+                        <option>Cancelled</option>
+                    </select>
+                </div>
+                <div class="relative">
+                    <input type="text" placeholder="Search orders..." class="p-3 border rounded-lg pl-10">
+                    <i class="fas fa-search absolute left-3 top-4 text-gray-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders List -->
+        <div id="ordersList" class="space-y-6">
+            <!-- Orders will load here -->
+            <div class="text-center py-12">
+                <i class="fas fa-history text-5xl text-gray-300 mb-4"></i>
+                <h3 class="text-xl font-semibold mb-2">No orders yet</h3>
+                <p class="text-gray-600 mb-6">Start shopping to see your order history here!</p>
+                <a href="shop.html" 
+                   class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700">
+                    <i class="fas fa-store mr-2"></i>Start Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load orders
+        function loadOrders() {
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const container = document.getElementById('ordersList');
+            
+            if (orders.length === 0) {
+                return; // Show default empty message
+            }
+            
+            container.innerHTML = '';
+            
+            // Sort by date (newest first)
+            orders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+            
+            orders.forEach(order => {
+                const orderCard = document.createElement('div');
+                orderCard.className = 'bg-white rounded-xl shadow overflow-hidden';
+                orderCard.innerHTML = `
+                    <div class="p-6">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold mb-1">Order #${order.orderId}</h3>
+                                <p class="text-gray-600">Placed on ${new Date(order.orderDate).toLocaleDateString('en-IN')}</p>
+                            </div>
+                            <div class="mt-2 md:mt-0">
+                                <span class="px-4 py-2 rounded-full text-sm ${
+                                    order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
+                                    order.status === 'Processing' ? 'bg-yellow-100 text-yellow-800' :
+                                    order.status === 'Cancelled' ? 'bg-red-100 text-red-800' :
+                                    'bg-gray-100 text-gray-800'
+                                }">
+                                    ${order.status || 'Processing'}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                            <div>
+                                <h4 class="font-semibold mb-2">Delivery Address</h4>
+                                <p class="text-gray-700">${order.customerInfo.address}</p>
+                                <p class="text-gray-700">${order.customerInfo.city}, ${order.customerInfo.state}</p>
+                                <p class="text-gray-700">PIN: ${order.customerInfo.pinCode}</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Payment</h4>
+                                <p class="text-gray-700">${order.paymentMethod}</p>
+                                <p class="text-gray-700">Status: Paid</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Order Total</h4>
+                                <p class="text-2xl font-bold text-green-600">₹${order.orderSummary.total.toFixed(2)}</p>
+                                <p class="text-sm text-gray-600">${order.orderSummary.items.length} items</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <a href="billing.html?order=${order.orderId}" 
+                                   class="text-green-600 hover:text-green-700 font-semibold">
+                                    <i class="fas fa-file-invoice mr-2"></i>View Invoice
+                                </a>
+                            </div>
+                            <div class="flex space-x-3">
+                                <button onclick="reorder(${order.orderId})" 
+                                        class="bg-green-100 text-green-700 px-4 py-2 rounded-lg font-semibold hover:bg-green-200">
+                                    <i class="fas fa-redo mr-2"></i>Reorder
+                                </button>
+                                <button onclick="trackOrder(${order.orderId})" 
+                                        class="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-semibold hover:bg-blue-200">
+                                    <i class="fas fa-truck mr-2"></i>Track
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(orderCard);
+            });
+        }
+        
+        function reorder(orderId) {
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const order = orders.find(o => o.orderId === orderId);
+            
+            if (order) {
+                // Add items to cart
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                order.orderSummary.items.forEach(item => {
+                    cart.push({
+                        ...item,
+                        quantity: item.quantity
+                    });
+                });
+                
+                localStorage.setItem('cart', JSON.stringify(cart));
+                alert('Items added to cart!');
+                window.location.href = 'cart.html';
+            }
+        }
+        
+        function trackOrder(orderId) {
+            alert(`Tracking order #${orderId}\nStatus: Out for delivery\nEstimated delivery: Today, 2-4 PM`);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadOrders);
+    </script>
+</body>
+</html>

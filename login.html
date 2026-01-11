@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SuperMarket Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .auth-bg {
+            background: linear-gradient(rgba(22, 163, 74, 0.9), rgba(5, 150, 105, 0.9)),
+                        url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        .auth-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        .tab-active {
+            background: #16a34a;
+            color: white;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center auth-bg">
+    <div class="container mx-auto px-4">
+        <div class="max-w-md mx-auto">
+            <!-- Logo -->
+            <div class="text-center mb-8">
+                <a href="index.html" class="inline-flex items-center space-x-3">
+                    <div class="bg-white text-green-600 p-3 rounded-lg">
+                        <i class="fas fa-shopping-cart text-3xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <h1 class="text-3xl font-bold text-white">Super<span class="text-yellow-300">Market</span>Pro</h1>
+                        <p class="text-white/80">Fresh groceries delivered</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex bg-white rounded-full p-1 mb-8">
+                <button id="loginTab" 
+                        class="flex-1 py-3 rounded-full font-semibold tab-active">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Login
+                </button>
+                <button id="signupTab" 
+                        class="flex-1 py-3 rounded-full font-semibold">
+                    <i class="fas fa-user-plus mr-2"></i>Sign Up
+                </button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-card rounded-2xl p-8 shadow-2xl">
+                <h2 class="text-2xl font-bold mb-6">Welcome Back!</h2>
+                
+                <form id="loginFormElement" class="space-y-6">
+                    <div>
+                        <label class="block mb-2 font-semibold">Email Address</label>
+                        <input type="email" 
+                               id="loginEmail" 
+                               required
+                               class="w-full p-3 border rounded-lg focus:outline-none focus:border-green-500"
+                               placeholder="your@email.com">
+                    </div>
+                    
+                    <div>
+                        <label class="block mb-2 font-semibold">Password</label>
+                        <input type="password" 
+                               id="loginPassword" 
+                               required
+                               class="w-full p-3 border rounded-lg focus:outline-none focus:border-green-500"
+                               placeholder="••••••••">
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="mr-2">
+                            <span class="text-sm">Remember me</span>
+                        </label>
+                        <a href="#" class="text-green-600 hover:text-green-700 text-sm">Forgot password?</a>
+                    </div>
+                    
+                    <button type="submit" 
+                            class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login to Account
+                    </button>
+                    
+                    <div class="text-center my-6">
+                        <div class="border-b"></div>
+                        <span class="bg-white px-4 -mt-3 inline-block text-gray-500">OR</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <button type="button" 
+                                class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg">
+                            <i class="fab fa-facebook mr-2"></i>Facebook
+                        </button>
+                        <button type="button" 
+                                class="bg-red-600 hover:bg-red-700 text-white p-3 rounded-lg">
+                            <i class="fab fa-google mr-2"></i>Google
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signupForm" class="auth-card rounded-2xl p-8 shadow-2xl hidden">
+                <h2 class="text-2xl font-bold mb-6">Create Account</h2>
+                
+                <form id="signupFormElement" class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block mb-2 font-semibold">First Name</label>
+                            <input type="text" 
+                                   id="firstName" 
+                                   required
+                                   class="w-full p-3 border rounded-lg focus:outline-none focus:border-green-500">
+                        </div>
+                        <div>
+                            <label class="block mb-2 font-semibold">Last Name</label>
+                            <input type="text" 
+                                   id="lastName" 
+                                   required
+                                   class="w-full p-3 border rounded-lg focus:outline-none focus:border-green-500">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block mb-2 font-semibold">Email Address</label>
+                        <input type="email" 
+                               id="signupEmail" 
+                               required
+                               class="w-full p-3 border rounded-lg focus:outline-none focus:border-green-500">
+                    </div>
+                    
+                    <div>
+                        <label class="block mb-2 font-semibold">Phone Number</label>
+                        <input type="tel" 
+                               id="phone" 
+                               required
+                               class="w-full p-3 border rounded-lg focus:outline-none focus:border-green-500">
+                    </div>
+                    
+                    <div>
+                        <label class="block mb-2 font-semibold">Password</label>
+                        <input type="password" 
+                               id="signupPassword" 
+                               required
+                               class="w-full p-3 border rounded-lg focus:outline-none focus:border-green-500">
+                        <div class="text-xs text-gray-500 mt-1">At least 8 characters with letters and numbers</div>
+                    </div>
+                    
+                    <div>
+                        <label class="block mb-2 font-semibold">Confirm Password</label>
+                        <input type="password" 
+                               id="confirmPassword" 
+                               required
+                               class="w-full p-3 border rounded-lg focus:outline-none focus:border-green-500">
+                    </div>
+                    
+                    <div>
+                        <label class="flex items-start">
+                            <input type="checkbox" required class="mr-3 mt-1">
+                            <span class="text-sm">
+                                I agree to the <a href="#" class="text-green-600">Terms & Conditions</a> and 
+                                <a href="#" class="text-green-600">Privacy Policy</a>
+                            </span>
+                        </label>
+                    </div>
+                    
+                    <button type="submit" 
+                            class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold">
+                        <i class="fas fa-user-plus mr-2"></i>Create Account
+                    </button>
+                </form>
+            </div>
+
+            <!-- Back to home -->
+            <div class="text-center mt-6">
+                <a href="index.html" class="text-white hover:text-yellow-300">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginTab = document.getElementById('loginTab');
+            const signupTab = document.getElementById('signupTab');
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            const loginFormElement = document.getElementById('loginFormElement');
+            const signupFormElement = document.getElementById('signupFormElement');
+
+            // Tab switching
+            function switchTab(tab) {
+                if (tab === 'login') {
+                    loginTab.classList.add('tab-active');
+                    signupTab.classList.remove('tab-active');
+                    loginForm.classList.remove('hidden');
+                    signupForm.classList.add('hidden');
+                } else {
+                    signupTab.classList.add('tab-active');
+                    loginTab.classList.remove('tab-active');
+                    signupForm.classList.remove('hidden');
+                    loginForm.classList.add('hidden');
+                }
+            }
+
+            loginTab.addEventListener('click', () => switchTab('login'));
+            signupTab.addEventListener('click', () => switchTab('signup'));
+
+            // Login form submission
+            loginFormElement.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                // Simple validation
+                if (!email || !password) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+                
+                // Get users from localStorage or default
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                const user = users.find(u => u.email === email && u.password === password);
+                
+                if (user || (email === 'admin@supermarket.com' && password === 'admin123')) {
+                    // Save user session
+                    const userData = user || {
+                        email: email,
+                        name: email.split('@')[0],
+                        role: email === 'admin@supermarket.com' ? 'admin' : 'user'
+                    };
+                    
+                    localStorage.setItem('currentUser', JSON.stringify(userData));
+                    
+                    // Redirect based on role
+                    if (userData.role === 'admin') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                } else {
+                    alert('Invalid email or password');
+                }
+            });
+
+            // Signup form submission
+            signupFormElement.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const email = document.getElementById('signupEmail').value;
+                const phone = document.getElementById('phone').value;
+                const password = document.getElementById('signupPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                // Validation
+                if (!firstName || !lastName || !email || !phone || !password || !confirmPassword) {
+                    alert('Please fill in all fields');
+                    return;
+                }
+                
+                if (password !== confirmPassword) {
+                    alert('Passwords do not match');
+                    return;
+                }
+                
+                if (password.length < 8) {
+                    alert('Password must be at least 8 characters');
+                    return;
+                }
+                
+                // Get existing users
+                const users = JSON.parse(localStorage.getItem('users')) || [];
+                
+                // Check if user already exists
+                if (users.some(u => u.email === email)) {
+                    alert('User with this email already exists');
+                    return;
+                }
+                
+                // Create new user
+                const newUser = {
+                    id: Date.now(),
+                    firstName,
+                    lastName,
+                    email,
+                    phone,
+                    password, // Note: In production, hash the password
+                    role: 'user',
+                    joinDate: new Date().toISOString(),
+                    orders: []
+                };
+                
+                // Save user
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                // Auto login
+                localStorage.setItem('currentUser', JSON.stringify({
+                    email: email,
+                    name: firstName + ' ' + lastName,
+                    role: 'user'
+                }));
+                
+                alert('Account created successfully!');
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+</html>
