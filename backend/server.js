@@ -10,14 +10,22 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../')));
 
-// Routes
+// Core Routes
 app.use('/api/products', require('./routes/products'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/ai', require('./routes/ai'));
 
+// AWS Cloud Integration Routes
+app.use('/api/upload', require('./routes/upload')); // AWS S3 Uploads
+app.use('/api/cart', require('./routes/cart'));     // AWS DynamoDB Cart State
+app.use('/api/orders', require('./routes/orders'));   // AWS RDS MySQL + AWS SNS + AWS Lambda
+
 // Health check route
 app.get('/health', (req, res) => {
-    res.json({ status: 'OK', message: 'API is running smoothly!' });
+    res.json({
+        status: 'OK',
+        message: 'SuperMarket API running with AWS RDS, DynamoDB, Lambda, S3, & SNS services!'
+    });
 });
 
 // Error handling middleware
