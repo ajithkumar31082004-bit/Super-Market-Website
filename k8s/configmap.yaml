@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: supermarket-config
+  namespace: default
+data:
+  PORT: "5000"
+  NODE_ENV: "production"
+  DB_HOST: "supermarket-db.xxxxxx.us-east-1.rds.amazonaws.com"
+  DB_NAME: "supermarket_db"
+  DB_USER: "admin"
+  DB_PORT: "3306"
+  AWS_REGION: "us-east-1"
+  AWS_S3_BUCKET_NAME: "supermarket-product-images"
+  AWS_SNS_TOPIC_ARN: "arn:aws:sns:us-east-1:123456789012:SuperMarketOrderNotifications"
+  AWS_DYNAMODB_CARTS_TABLE: "SuperMarket_Carts"
+  AWS_DYNAMODB_LOGS_TABLE: "SuperMarket_Logs"
+  AWS_LAMBDA_BG_WORKER: "supermarket-order-processor"

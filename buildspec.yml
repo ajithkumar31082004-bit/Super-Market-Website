@@ -1,0 +1,63 @@
+version: 0.2
+
+env:
+  variables:
+    AWS_REGION: "us-east-1"
+    ECR_REPOSITORY: "supermarket-app"
+    EKS_CLUSTER_NAME: "supermarket-eks-cluster"
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - echo "Installing kubectl..."
+      - curl -o kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.28.3/2023-11-14/bin/linux/amd64/kubectl
+      - chmod +x ./kubectl
+      - mv ./kubectl /usr/local/bin/kubectl
+      - kubectl version --client
+
+  pre_build:
+    commands:
+      - echo "Logging in to Amazon ECR..."
+      - ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+      - ECR_REGISTRY="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+      - REPOSITORY_URI="${ECR_REGISTRY}/${ECR_REPOSITORY}"
+      - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_COMMIT_ID | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:-latest}
+      - echo "Target Repository URI: ${REPOSITORY_URI}"
+      - echo "Image Tag: ${IMAGE_TAG}"
+
+  build:
+    commands:
+      - echo "Building Docker image..."
+      - docker build -t ${REPOSITORY_URI}:latest .
+      - docker tag ${REPOSITORY_URI}:latest ${REPOSITORY_URI}:${IMAGE_TAG}
+
+  post_build:
+    commands:
+      - echo "Pushing Docker image to Amazon ECR..."
+      - docker push ${REPOSITORY_URI}:latest
+      - docker push ${REPOSITORY_URI}:${IMAGE_TAG}
+      
+      - echo "Updating Kubeconfig for Amazon EKS..."
+      - aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION}
+      
+      - echo "Applying Kubernetes Manifests..."
+      - kubectl apply -f k8s/configmap.yaml
+      - kubectl apply -f k8s/secret.yaml
+      - kubectl apply -f k8s/service.yaml
+      - kubectl apply -f k8s/ingress.yaml
+      - kubectl apply -f k8s/deployment.yaml
+      
+      - echo "Updating deployment container image..."
+      - kubectl set image deployment/supermarket-deployment supermarket-container=${REPOSITORY_URI}:${IMAGE_TAG} --record
+      
+      - echo "Verifying rollout status..."
+      - kubectl rollout status deployment/supermarket-deployment --timeout=180s
+      - echo "AWS CodeBuild Deployment Completed Successfully!"
+
+artifacts:
+  files:
+    - '**/*'
