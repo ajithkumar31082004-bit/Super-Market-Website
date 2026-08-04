@@ -1,0 +1,9 @@
+{
+  "name": "super-market-website",
+  "version": "1.0.0",
+  "description": "Super Market Website",
+  "scripts": {
+    "start": "npm start --prefix backend",
+    "dev": "npm run dev --prefix backend"
+  }
+}
