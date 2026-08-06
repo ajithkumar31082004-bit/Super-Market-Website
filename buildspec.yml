@@ -4,7 +4,7 @@ env:
   variables:
     AWS_REGION: "ap-south-1"
     ECR_REPOSITORY: "dev/super_market"
-    EKS_CLUSTER_NAME: "supermarket-eks-cluster"
+    EKS_CLUSTER_NAME: "adorable-synth-badger"
 
 phases:
   install:
