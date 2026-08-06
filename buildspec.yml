@@ -2,8 +2,8 @@ version: 0.2
 
 env:
   variables:
-    AWS_REGION: "us-east-1"
-    ECR_REPOSITORY: "supermarket-app"
+    AWS_REGION: "ap-south-1"
+    ECR_REPOSITORY: "dev/super_market"
     EKS_CLUSTER_NAME: "supermarket-eks-cluster"
 
 phases:

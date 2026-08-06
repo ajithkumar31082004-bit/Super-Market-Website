@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION = 'us-east-1'
+        AWS_REGION = 'ap-south-1'
         AWS_CREDENTIALS_ID = 'aws-credentials' // Jenkins Credentials ID
-        ECR_REPOSITORY = 'supermarket-app'
+        ECR_REPOSITORY = 'dev/super_market'
         EKS_CLUSTER_NAME = 'supermarket-eks-cluster'
         ECR_REGISTRY = ''
         IMAGE_TAG = "${BUILD_NUMBER}"

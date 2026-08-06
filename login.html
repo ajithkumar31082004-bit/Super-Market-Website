@@ -216,54 +216,41 @@
             signupTab.addEventListener('click', () => switchTab('signup'));
 
             // Login form submission
-            loginFormElement.addEventListener('submit', function(e) {
+            loginFormElement.addEventListener('submit', async function(e) {
                 e.preventDefault();
-                const email = document.getElementById('loginEmail').value;
+                const email = document.getElementById('loginEmail').value.trim();
                 const password = document.getElementById('loginPassword').value;
                 
-                // Simple validation
                 if (!email || !password) {
                     alert('Please fill in all fields');
                     return;
                 }
-                
-                // Get users from localStorage or default
-                const users = JSON.parse(localStorage.getItem('users')) || [];
-                const user = users.find(u => u.email === email && u.password === password);
-                
-                if (user || (email === 'admin@supermarket.com' && password === 'admin123')) {
-                    // Save user session
-                    const userData = user || {
-                        email: email,
-                        name: email.split('@')[0],
-                        role: email === 'admin@supermarket.com' ? 'admin' : 'user'
-                    };
-                    
-                    localStorage.setItem('currentUser', JSON.stringify(userData));
-                    
-                    // Redirect based on role
-                    if (userData.role === 'admin') {
+
+                // Call Auth class (handles Express API + LocalStorage fallback)
+                const result = await auth.login(email, password);
+
+                if (result.success) {
+                    if (result.user.role === 'admin') {
                         window.location.href = 'admin.html';
                     } else {
                         window.location.href = 'index.html';
                     }
                 } else {
-                    alert('Invalid email or password');
+                    alert(result.message || 'Invalid email or password');
                 }
             });
 
             // Signup form submission
-            signupFormElement.addEventListener('submit', function(e) {
+            signupFormElement.addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
-                const firstName = document.getElementById('firstName').value;
-                const lastName = document.getElementById('lastName').value;
-                const email = document.getElementById('signupEmail').value;
-                const phone = document.getElementById('phone').value;
+                const firstName = document.getElementById('firstName').value.trim();
+                const lastName = document.getElementById('lastName').value.trim();
+                const email = document.getElementById('signupEmail').value.trim();
+                const phone = document.getElementById('phone').value.trim();
                 const password = document.getElementById('signupPassword').value;
                 const confirmPassword = document.getElementById('confirmPassword').value;
                 
-                // Validation
                 if (!firstName || !lastName || !email || !phone || !password || !confirmPassword) {
                     alert('Please fill in all fields');
                     return;
@@ -274,46 +261,25 @@
                     return;
                 }
                 
-                if (password.length < 8) {
-                    alert('Password must be at least 8 characters');
+                if (password.length < 6) {
+                    alert('Password must be at least 6 characters');
                     return;
                 }
-                
-                // Get existing users
-                const users = JSON.parse(localStorage.getItem('users')) || [];
-                
-                // Check if user already exists
-                if (users.some(u => u.email === email)) {
-                    alert('User with this email already exists');
-                    return;
-                }
-                
-                // Create new user
-                const newUser = {
-                    id: Date.now(),
+
+                const result = await auth.register({
                     firstName,
                     lastName,
                     email,
                     phone,
-                    password, // Note: In production, hash the password
-                    role: 'user',
-                    joinDate: new Date().toISOString(),
-                    orders: []
-                };
-                
-                // Save user
-                users.push(newUser);
-                localStorage.setItem('users', JSON.stringify(users));
-                
-                // Auto login
-                localStorage.setItem('currentUser', JSON.stringify({
-                    email: email,
-                    name: firstName + ' ' + lastName,
-                    role: 'user'
-                }));
-                
-                alert('Account created successfully!');
-                window.location.href = 'index.html';
+                    password
+                });
+
+                if (result.success) {
+                    alert('Account created successfully!');
+                    window.location.href = 'index.html';
+                } else {
+                    alert(result.message || 'Registration failed');
+                }
             });
         });
     </script>

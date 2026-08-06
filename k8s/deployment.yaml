@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: supermarket-container
-          image: 123456789012.dkr.ecr.us-east-1.amazonaws.com/supermarket-app:latest
+          image: 131708658201.dkr.ecr.ap-south-1.amazonaws.com/dev/super_market:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
