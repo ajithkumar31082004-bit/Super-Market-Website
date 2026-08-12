@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SuperMarket Pro — Smart Cloud E-Commerce & DevOps Platform Case Study</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg-base: #0B0F19;
+      --bg-surface: rgba(17, 24, 39, 0.7);
+      --bg-surface-border: rgba(255, 255, 255, 0.08);
+      --aws-orange: #FF9900;
+      --aws-squid-ink: #232F3E;
+      --aws-blue: #1E88E5;
+      --text-primary: #F3F4F6;
+      --text-secondary: #9CA3AF;
+      --text-muted: #6B7280;
+      --success: #10B981;
+      --error: #EF4444;
+      --transition-speed: 0.3s;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255, 153, 0, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(30, 136, 229, 0.06) 0%, transparent 45%);
+      background-attachment: fixed;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Glassmorphism utility */
+    .glass-card {
+      background: var(--bg-surface);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--bg-surface-border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      transition: transform var(--transition-speed), border-color var(--transition-speed), box-shadow var(--transition-speed);
+      margin-bottom: 3rem;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(255, 153, 0, 0.2);
+      box-shadow: 0 12px 40px 0 rgba(255, 153, 0, 0.08);
+    }
+
+    /* Header & Hero Section */
+    header {
+      position: relative;
+      padding: 6rem 0 4rem;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 153, 0, 0.1);
+      color: var(--aws-orange);
+      border: 1px solid rgba(255, 153, 0, 0.3);
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+    }
+
+    .title-gradient {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #FFF 30%, var(--aws-orange) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+
+    .subtitle {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      max-width: 850px;
+      margin: 0 auto 3rem;
+    }
+
+    /* Quick Info Cards */
+    .project-info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 5rem;
+    }
+
+    .info-card {
+      background: rgba(17, 24, 39, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .info-card i {
+      font-size: 1.75rem;
+      color: var(--aws-orange);
+      background: rgba(255, 153, 0, 0.1);
+      padding: 1rem;
+      border-radius: 12px;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .info-card-content h4 {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .info-card-content p {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* Sections Layout */
+    section {
+      padding: 2rem 0;
+    }
+
+    .section-title {
+      font-size: 2.25rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -6px;
+      width: 60px;
+      height: 3px;
+      background: var(--aws-orange);
+      border-radius: 99px;
+    }
+
+    .section-description {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 3rem;
+      max-width: 850px;
+    }
+
+    /* Grid Layouts */
+    .two-col-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    @media (max-width: 768px) {
+      .two-col-grid {
+        grid-template-columns: 1fr;
+      }
+      .title-gradient {
+        font-size: 2.5rem;
+      }
+    }
+
+    /* Bullet List style */
+    .custom-list {
+      list-style: none;
+    }
+
+    .custom-list li {
+      position: relative;
+      padding-left: 2rem;
+      margin-bottom: 1.2rem;
+      color: var(--text-secondary);
+    }
+
+    .custom-list li::before {
+      content: "\f058";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      position: absolute;
+      left: 0;
+      top: 2px;
+      color: var(--aws-orange);
+      font-size: 1.1rem;
+    }
+
+    .custom-list strong {
+      color: var(--text-primary);
+    }
+
+    /* CI/CD Visual Flow Box */
+    .pipeline-visual-box {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 153, 0, 0.3);
+      border-radius: 14px;
+      padding: 1.8rem;
+      margin-bottom: 2rem;
+    }
+
+    .pipeline-flow-steps {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .pipeline-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--aws-squid-ink);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 1rem 1.2rem;
+      border-radius: 10px;
+      min-width: 130px;
+      text-align: center;
+      transition: transform 0.2s;
+    }
+
+    .pipeline-step:hover {
+      transform: translateY(-4px);
+      border-color: var(--aws-orange);
+    }
+
+    .pipeline-step i {
+      font-size: 1.5rem;
+      color: var(--aws-orange);
+    }
+
+    .pipeline-step span {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .pipeline-arrow {
+      color: var(--aws-orange);
+      font-size: 1.2rem;
+    }
+
+    /* Feature Grid & Cards */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      text-align: left;
+    }
+
+    .feature-card i {
+      font-size: 2rem;
+      color: var(--aws-orange);
+      margin-bottom: 1.5rem;
+      display: inline-block;
+    }
+
+    .feature-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      color: var(--text-primary);
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    /* Tech Stack Badge Lists */
+    .tech-stack-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+
+    .tech-group h3 {
+      font-size: 1.2rem;
+      margin-bottom: 1.2rem;
+      color: var(--aws-orange);
+      border-bottom: 1px solid rgba(255, 153, 0, 0.2);
+      padding-bottom: 0.5rem;
+    }
+
+    .badge-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .tech-tag {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: monospace;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background var(--transition-speed), border-color var(--transition-speed);
+    }
+
+    .tech-tag:hover {
+      background: rgba(255, 153, 0, 0.08);
+      border-color: rgba(255, 153, 0, 0.3);
+    }
+
+    .tech-tag i {
+      font-size: 1rem;
+    }
+
+    /* AWS Services detailed section */
+    .aws-services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .aws-service-card {
+      display: flex;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .aws-icon-wrapper {
+      background: var(--aws-squid-ink);
+      border: 1px solid rgba(255, 153, 0, 0.3);
+      padding: 1rem;
+      border-radius: 12px;
+      font-size: 1.75rem;
+      color: var(--aws-orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      flex-shrink: 0;
+    }
+
+    .aws-service-content h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .aws-service-content h3 span {
+      font-size: 0.8rem;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .aws-service-content p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    /* Timeline component */
+    .timeline {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .timeline::after {
+      content: '';
+      position: absolute;
+      width: 2px;
+      background: rgba(255, 255, 255, 0.08);
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      margin-left: -1px;
+    }
+
+    .timeline-item {
+      padding: 10px 40px;
+      position: relative;
+      background-color: inherit;
+      width: 50%;
+    }
+
+    .timeline-item::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      right: -8px;
+      background-color: var(--bg-base);
+      border: 3px solid var(--aws-orange);
+      top: 15px;
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    .left {
+      left: 0;
+      text-align: right;
+    }
+
+    .right {
+      left: 50%;
+      text-align: left;
+    }
+
+    .left::after {
+      right: -8px;
+    }
+
+    .right::after {
+      left: -8px;
+    }
+
+    .timeline-content {
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+    }
+
+    .timeline-content h3 {
+      font-size: 1.1rem;
+      color: var(--aws-orange);
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-content p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 768px) {
+      .timeline::after {
+        left: 31px;
+      }
+      .timeline-item {
+        width: 100%;
+        padding-left: 70px;
+        padding-right: 25px;
+        text-align: left;
+      }
+      .timeline-item::after {
+        left: 22px;
+      }
+      .right {
+        left: 0%;
+      }
+    }
+
+    /* Challenge Cards */
+    .challenge-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .challenge-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .challenge-card h3 {
+      color: var(--aws-orange);
+      font-size: 1.25rem;
+    }
+
+    .challenge-card .pill-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .challenge-pill {
+      background: rgba(255, 255, 255, 0.02);
+      border-left: 3px solid var(--aws-orange);
+      padding: 0.8rem 1.2rem;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .challenge-pill.sol {
+      border-left-color: var(--aws-blue);
+    }
+
+    .challenge-pill.out {
+      border-left-color: var(--success);
+    }
+
+    .challenge-pill h4 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .challenge-pill p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    /* Metrics Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .metric-item {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 2rem 1.5rem;
+    }
+
+    .metric-value {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--aws-orange);
+      font-family: 'Outfit', sans-serif;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-label {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* Links container */
+    .links-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--aws-orange);
+      color: var(--aws-squid-ink);
+      font-weight: 700;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      background-color: #e08800;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-primary);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Recruiter summary focus styling */
+    .recruiter-summary-card {
+      border: 2px solid rgba(255, 153, 0, 0.4);
+      background: linear-gradient(145deg, rgba(255, 153, 0, 0.03) 0%, rgba(30, 136, 229, 0.03) 100%);
+    }
+
+    /* SVG Architecture container */
+    .architecture-diagram-wrapper {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 2rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 2rem;
+      overflow-x: auto;
+    }
+
+    .architecture-diagram-wrapper svg {
+      width: 100%;
+      min-width: 850px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Header Hero -->
+    <header>
+      <div class="badge">
+        <i class="fa-solid fa-cloud"></i> Automated AWS CI/CD & Serverless ECS Deployment
+      </div>
+      <h1 class="title-gradient">SuperMarket Pro</h1>
+      <p class="subtitle">An enterprise-grade, cloud-native supermarket e-commerce platform and inventory engine deployed via a zero-downtime AWS CI/CD pipeline (GitHub ➔ CodePipeline ➔ CodeBuild ➔ ECR ➔ ECS Fargate).</p>
+      
+      <!-- Quick Info Block -->
+      <div class="project-info-grid">
+        <div class="info-card">
+          <i class="fa-solid fa-folder-open"></i>
+          <div class="info-card-content">
+            <h4>Category</h4>
+            <p>Cloud E-Commerce / DevOps</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <i class="fa-solid fa-circle-check"></i>
+          <div class="info-card-content">
+            <h4>Project Status</h4>
+            <p>Production Ready</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <i class="fa-solid fa-clock"></i>
+          <div class="info-card-content">
+            <h4>Duration</h4>
+            <p>4 Weeks</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <i class="fa-solid fa-user-gear"></i>
+          <div class="info-card-content">
+            <h4>My Role</h4>
+            <p>DevOps & Cloud Engineer</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Overview Section -->
+    <section id="overview" class="glass-card">
+      <div class="two-col-grid">
+        <div>
+          <h2 class="section-title">Overview</h2>
+          <p class="section-description" style="margin-top: 1rem;">
+            SuperMarket Pro is a high-availability, cloud-native supermarket application designed to handle high-concurrency retail transactions, dynamic shopping cart sessions, inventory tracking, asset management, and serverless order processing.
+          </p>
+          <ul class="custom-list">
+            <li><strong>Who it is for:</strong> Modern retail chains and grocery brands seeking automated digital storefronts, real-time inventory management, and zero-downtime deployment pipelines.</li>
+            <li><strong>Why it was built:</strong> To replace monolithic legacy grocery systems with an elastic, microservice-based architecture that scales automatically during peak shopping hours.</li>
+            <li><strong>Core Objective:</strong> Combine serverless AWS compute with a fully automated CI/CD pipeline (**AWS CodePipeline**, **AWS CodeBuild**, **Amazon ECR**, and **Amazon ECS Fargate**) for zero-touch deployment.</li>
+          </ul>
+        </div>
+        <div style="background: rgba(255,255,255,0.02); border-radius: 12px; padding: 2rem; border: 1px solid rgba(255,255,255,0.05);">
+          <h3 style="color: var(--aws-orange); margin-bottom: 1rem;"><i class="fa-solid fa-bolt"></i> High-Level Architecture Model</h3>
+          <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            The platform relies on a hybrid datastore strategy: dynamic cart states reside in low-latency **Amazon DynamoDB**, catalog transactions sit in **Amazon RDS MySQL**, and media uploads stream straight to **Amazon S3**.
+          </p>
+          <p style="font-size: 0.95rem; color: var(--text-secondary);">
+            Orders trigger asynchronous serverless **AWS Lambda** processors that dispatch SMS/Email updates via **AWS SNS**, while **Gemini AI** generates smart product recommendations for shoppers.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DevOps Pipeline Highlight Section -->
+    <section id="pipeline" class="glass-card">
+      <h2 class="section-title">Automated DevOps CI/CD Pipeline</h2>
+      <p class="section-description">Every code commit pushed to GitHub triggers a zero-touch, automated continuous integration & deployment workflow.</p>
+      
+      <div class="pipeline-visual-box">
+        <div class="pipeline-flow-steps">
+          <div class="pipeline-step">
+            <i class="fa-brands fa-github"></i>
+            <span>GitHub</span>
+          </div>
+          <i class="fa-solid fa-chevron-right pipeline-arrow"></i>
+          <div class="pipeline-step">
+            <i class="fa-solid fa-diagram-project"></i>
+            <span>CodePipeline</span>
+          </div>
+          <i class="fa-solid fa-chevron-right pipeline-arrow"></i>
+          <div class="pipeline-step">
+            <i class="fa-solid fa-gears"></i>
+            <span>CodeBuild</span>
+          </div>
+          <i class="fa-solid fa-chevron-right pipeline-arrow"></i>
+          <div class="pipeline-step">
+            <i class="fa-solid fa-box-archive"></i>
+            <span>Amazon ECR</span>
+          </div>
+          <i class="fa-solid fa-chevron-right pipeline-arrow"></i>
+          <div class="pipeline-step">
+            <i class="fa-solid fa-cubes-stacked"></i>
+            <span>ECS Fargate</span>
+          </div>
+          <i class="fa-solid fa-chevron-right pipeline-arrow"></i>
+          <div class="pipeline-step">
+            <i class="fa-solid fa-globe"></i>
+            <span>Live Web Site</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col-grid">
+        <div>
+          <h3 style="color: var(--aws-orange); margin-bottom: 1rem;"><i class="fa-solid fa-code-commit"></i> Build & Packaging Stage</h3>
+          <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            Code changes trigger an AWS CodePipeline execution via GitHub webhook. AWS CodeBuild reads the custom <code style="color: var(--aws-orange);">buildspec.yml</code> to run unit checks, authenticate with Amazon ECR, and build optimized multi-stage Docker images tagged with Git commit SHA and <code style="color: var(--aws-orange);">latest</code>.
+          </p>
+        </div>
+        <div>
+          <h3 style="color: var(--aws-blue); margin-bottom: 1rem;"><i class="fa-solid fa-cloud-arrow-up"></i> Serverless Deployment Stage</h3>
+          <p style="color: var(--text-secondary); font-size: 0.95rem;">
+            CodeBuild pushes container image tags to Amazon ECR registry and updates the Amazon ECS Task Definition. ECS executes a rolling deployment on serverless Fargate tasks behind an Application Load Balancer, guaranteeing zero downtime.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Problem & Solution -->
+    <section id="problem-solution" class="glass-card">
+      <div class="two-col-grid">
+        <div>
+          <h2 class="section-title" style="color: var(--error);">The Problem</h2>
+          <p class="section-description" style="margin-top: 1rem; color: var(--text-secondary);">
+            Traditional supermarket e-commerce setups face severe infrastructure constraints:
+          </p>
+          <ul class="custom-list">
+            <li><strong>Manual Deployment Bottlenecks:</strong> SSH-based manual server updates cause service downtime and human deployment errors.</li>
+            <li><strong>Cart Session Latency:</strong> Storing cart states in relational databases creates locks and slows checkout response times.</li>
+            <li><strong>Static Infrastructure Costs:</strong> Over-provisioned EC2 instances run 24/7 even during off-peak night hours.</li>
+            <li><strong>Unsynchronized Stock Data:</strong> Slow database queries cause out-of-stock items to remain orderable on storefronts.</li>
+          </ul>
+        </div>
+        <div>
+          <h2 class="section-title" style="color: var(--success);">The Solution</h2>
+          <p class="section-description" style="margin-top: 1rem; color: var(--text-secondary);">
+            SuperMarket Pro delivers cloud automation and instant scalability:
+          </p>
+          <ul class="custom-list">
+            <li><strong>Zero-Downtime AWS CI/CD:</strong> Automated pipeline pushes verified Docker containers from GitHub to ECS Fargate in minutes.</li>
+            <li><strong>Sub-Millisecond DynamoDB Caching:</strong> Shopping cart items store in DynamoDB for instant add/remove responsiveness.</li>
+            <li><strong>Serverless Pay-per-Use Runtime:</strong> ECS Fargate automatically scales container instances up or down based on traffic load.</li>
+            <li><strong>Asynchronous Lambda Order Processing:</strong> AWS Lambda and SNS handle post-checkout tasks without blocking customer UI.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- System Architecture Diagram -->
+    <section id="architecture" class="glass-card">
+      <h2 class="section-title">System Architecture</h2>
+      <p class="section-description">A fully decoupled AWS cloud infrastructure combining automated CI/CD, container orchestration, serverless execution, and multi-database datastores.</p>
+      
+      <div class="architecture-diagram-wrapper">
+        <!-- SVG Architecture Diagram -->
+        <svg viewBox="0 0 1000 520" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#FF9900"/>
+            </marker>
+            <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#1E88E5"/>
+            </marker>
+          </defs>
+
+          <!-- Top Section: CI/CD Pipeline -->
+          <rect x="20" y="20" width="960" height="90" rx="8" fill="#1A202C" stroke="rgba(255, 153, 0, 0.4)" stroke-width="1.5" stroke-dasharray="4,4"/>
+          <text x="40" y="45" fill="#FF9900" font-family="Outfit" font-size="13" font-weight="700">AUTOMATED DEVOPS CI/CD PIPELINE</text>
+
+          <!-- Pipeline Nodes inside top section -->
+          <rect x="60" y="55" width="100" height="40" rx="6" fill="#232F3E" stroke="rgba(255,255,255,0.1)"/>
+          <text x="110" y="79" fill="#FFF" font-family="Inter" font-size="11" text-anchor="middle">1. GitHub Push</text>
+
+          <path d="M 160 75 L 205 75" stroke="#FF9900" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <rect x="215" y="55" width="125" height="40" rx="6" fill="#1E88E5" fill-opacity="0.15" stroke="#1E88E5"/>
+          <text x="277" y="79" fill="#FFF" font-family="Inter" font-size="11" text-anchor="middle">2. CodePipeline</text>
+
+          <path d="M 340 75 L 385 75" stroke="#FF9900" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <rect x="395" y="55" width="125" height="40" rx="6" fill="#232F3E" stroke="#FF9900"/>
+          <text x="457" y="79" fill="#FFF" font-family="Inter" font-size="11" text-anchor="middle">3. AWS CodeBuild</text>
+
+          <path d="M 520 75 L 565 75" stroke="#FF9900" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <rect x="575" y="55" width="115" height="40" rx="6" fill="#232F3E" stroke="rgba(255,255,255,0.1)"/>
+          <text x="632" y="79" fill="#FFF" font-family="Inter" font-size="11" text-anchor="middle">4. Amazon ECR</text>
+
+          <path d="M 690 75 L 735 75" stroke="#FF9900" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <rect x="745" y="55" width="135" height="40" rx="6" fill="#FF9900" fill-opacity="0.15" stroke="#FF9900"/>
+          <text x="812" y="79" fill="#FFF" font-family="Inter" font-size="11" text-anchor="middle">5. ECS Fargate</text>
+
+          <!-- Client Layer -->
+          <rect x="20" y="210" width="120" height="200" rx="8" fill="#232F3E" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+          <text x="80" y="240" fill="#FFF" font-family="Outfit" font-size="14" font-weight="600" text-anchor="middle">CLIENTS</text>
+          <text x="80" y="275" fill="#9CA3AF" font-family="Inter" font-size="11" text-anchor="middle">Supermarket Storefront</text>
+          <text x="80" y="305" fill="#9CA3AF" font-family="Inter" font-size="11" text-anchor="middle">Admin Product Portal</text>
+          <text x="80" y="335" fill="#9CA3AF" font-family="Inter" font-size="11" text-anchor="middle">Billing Kiosk / Cart</text>
+          <text x="80" y="365" fill="#9CA3AF" font-family="Inter" font-size="11" text-anchor="middle">Order History Page</text>
+
+          <!-- Routing/ALB -->
+          <path d="M 140 310 L 200 310" stroke="#FF9900" stroke-width="2" marker-end="url(#arrow)"/>
+          
+          <rect x="210" y="240" width="110" height="140" rx="8" fill="#1E88E5" fill-opacity="0.15" stroke="#1E88E5" stroke-width="2"/>
+          <text x="265" y="275" fill="#FFF" font-family="Outfit" font-size="14" font-weight="600" text-anchor="middle">ENTRY LAYER</text>
+          <text x="265" y="305" fill="#FF9900" font-family="Inter" font-size="12" font-weight="600" text-anchor="middle">AWS ALB</text>
+          <text x="265" y="335" fill="#9CA3AF" font-family="Inter" font-size="11" text-anchor="middle">Load Balancer</text>
+
+          <path d="M 320 310 L 380 310" stroke="#FF9900" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <!-- Backend ECS Container -->
+          <rect x="390" y="180" width="160" height="260" rx="8" fill="#232F3E" stroke="#FF9900" stroke-width="2"/>
+          <text x="470" y="210" fill="#FFF" font-family="Outfit" font-size="14" font-weight="600" text-anchor="middle">Amazon ECS Task</text>
+          <text x="470" y="230" fill="#9CA3AF" font-family="Inter" font-size="11" text-anchor="middle">(Docker Container)</text>
+          
+          <!-- Inner Sub-modules -->
+          <rect x="405" y="250" width="130" height="35" rx="4" fill="rgba(255,153,0,0.1)" stroke="#FF9900" stroke-width="1"/>
+          <text x="470" y="272" fill="#FFF" font-family="Inter" font-size="11" text-anchor="middle">Node.js Express API</text>
+
+          <rect x="405" y="300" width="130" height="35" rx="4" fill="rgba(255,153,0,0.1)" stroke="#FF9900" stroke-width="1"/>
+          <text x="470" y="322" fill="#FFF" font-family="Inter" font-size="11" text-anchor="middle">DynamoDB Cart Service</text>
+
+          <rect x="405" y="350" width="130" height="35" rx="4" fill="rgba(255,153,0,0.1)" stroke="#FF9900" stroke-width="1"/>
+          <text x="470" y="372" fill="#FFF" font-family="Inter" font-size="11" text-anchor="middle">Gemini AI Client</text>
+
+          <!-- Top Datastore Path (DynamoDB Cart) -->
+          <path d="M 550 260 L 630 260" stroke="#FF9900" stroke-width="2" marker-end="url(#arrow)"/>
+          
+          <rect x="640" y="230" width="120" height="60" rx="6" fill="#1E88E5" fill-opacity="0.1" stroke="#1E88E5" stroke-width="1.5"/>
+          <text x="700" y="255" fill="#FFF" font-family="Outfit" font-size="12" font-weight="600" text-anchor="middle">AWS DynamoDB</text>
+          <text x="700" y="275" fill="#9CA3AF" font-family="Inter" font-size="10" text-anchor="middle">Fast Shopping Cart</text>
+
+          <!-- Center Datastore Path (RDS MySQL) -->
+          <path d="M 550 310 L 630 310" stroke="#FF9900" stroke-width="2" marker-end="url(#arrow)"/>
+          
+          <rect x="640" y="300" width="120" height="70" rx="8" fill="#232F3E" stroke="#FF9900" stroke-width="1.5"/>
+          <text x="700" y="325" fill="#FFF" font-family="Outfit" font-size="13" font-weight="600" text-anchor="middle">Amazon RDS</text>
+          <text x="700" y="345" fill="#9CA3AF" font-family="Inter" font-size="10" text-anchor="middle">MySQL (Catalog & Orders)</text>
+
+          <!-- Right Path (S3 Bucket) -->
+          <path d="M 550 360 L 630 360" stroke="#FF9900" stroke-width="2" marker-end="url(#arrow)"/>
+          
+          <rect x="640" y="380" width="120" height="60" rx="6" fill="#232F3E" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+          <text x="700" y="405" fill="#FFF" font-family="Outfit" font-size="12" font-weight="600" text-anchor="middle">Amazon S3</text>
+          <text x="700" y="425" fill="#9CA3AF" font-family="Inter" font-size="10" text-anchor="middle">Product Assets Storage</text>
+
+          <!-- Bottom Path: Lambda & SNS -->
+          <path d="M 470 440 L 470 480 L 630 480" stroke="#FF9900" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+
+          <rect x="640" y="455" width="120" height="50" rx="6" fill="#1E88E5" fill-opacity="0.1" stroke="#1E88E5" stroke-width="1.5"/>
+          <text x="700" y="475" fill="#FFF" font-family="Outfit" font-size="12" font-weight="600" text-anchor="middle">AWS Lambda</text>
+          <text x="700" y="492" fill="#9CA3AF" font-family="Inter" font-size="10" text-anchor="middle">Order Processor</text>
+          
+          <path d="M 760 480 L 810 480" stroke="#1E88E5" stroke-width="2" marker-end="url(#arrow-blue)"/>
+          
+          <rect x="825" y="455" width="110" height="50" rx="6" fill="#232F3E" stroke="#FF9900" stroke-width="1.5"/>
+          <text x="880" y="475" fill="#FFF" font-family="Outfit" font-size="12" font-weight="600" text-anchor="middle">AWS SNS</text>
+          <text x="880" y="492" fill="#9CA3AF" font-family="Inter" font-size="10" text-anchor="middle">SMS/Email Alerts</text>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Key Features -->
+    <section id="features" class="glass-card">
+      <h2 class="section-title">Key Platform Features</h2>
+      <p class="section-description">Unifying customer shopping storefronts, real-time inventory administration, dynamic cart caching, and automated cloud deployments.</p>
+      
+      <div class="feature-grid">
+        <!-- 1 -->
+        <div class="info-card feature-card">
+          <i class="fa-solid fa-store"></i>
+          <div>
+            <h3>SuperMarket Storefront</h3>
+            <p>Responsive e-commerce UI featuring dynamic item filtering, category browsing, search, and live price calculations.</p>
+          </div>
+        </div>
+        <!-- 2 -->
+        <div class="info-card feature-card">
+          <i class="fa-solid fa-bolt-lightning"></i>
+          <div>
+            <h3>DynamoDB Cart Engine</h3>
+            <p>Sub-millisecond cart item storage and session recovery powered by Amazon DynamoDB key-value tables.</p>
+          </div>
+        </div>
+        <!-- 3 -->
+        <div class="info-card feature-card">
+          <i class="fa-solid fa-boxes-packing"></i>
+          <div>
+            <h3>Admin Inventory Portal</h3>
+            <p>Full CRUD admin dashboard for adding products, modifying stock quantities, updating prices, and tracking inventory levels.</p>
+          </div>
+        </div>
+        <!-- 4 -->
+        <div class="info-card feature-card">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <div>
+            <h3>Amazon S3 Asset Pipeline</h3>
+            <p>Direct multipart image uploading for product catalog images with secure bucket policy controls and CDN distribution.</p>
+          </div>
+        </div>
+        <!-- 5 -->
+        <div class="info-card feature-card">
+          <i class="fa-solid fa-gear"></i>
+          <div>
+            <h3>AWS Lambda & SNS Fulfillment</h3>
+            <p>Event-driven serverless functions that calculate totals, update stock in MySQL RDS, and trigger SNS notification emails.</p>
+          </div>
+        </div>
+        <!-- 6 -->
+        <div class="info-card feature-card">
+          <i class="fa-solid fa-robot"></i>
+          <div>
+            <h3>Gemini AI Smart Shopping</h3>
+            <p>Generative AI assistant providing personalized grocery recommendations, recipe item matching, and customer query support.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tech Stack -->
+    <section id="tech-stack" class="glass-card">
+      <h2 class="section-title">Technology Stack</h2>
+      <p class="section-description">Modern tech stack selected to guarantee performance, scaling, containerization, and easy maintainability.</p>
+      
+      <div class="tech-stack-container">
+        <!-- Front -->
+        <div class="tech-group">
+          <h3>Frontend & UI</h3>
+          <div class="badge-cloud">
+            <span class="tech-tag"><i class="fa-brands fa-html5" style="color: #E34F26;"></i> HTML5</span>
+            <span class="tech-tag"><i class="fa-brands fa-css3-alt" style="color: #1572B6;"></i> Vanilla CSS</span>
+            <span class="tech-tag"><i class="fa-brands fa-js" style="color: #F7DF1E;"></i> JavaScript ES6</span>
+            <span class="tech-tag"><i class="fa-solid fa-mobile-screen" style="color: #10B981;"></i> Responsive Grid</span>
+          </div>
+        </div>
+        <!-- Back -->
+        <div class="tech-group">
+          <h3>Backend & APIs</h3>
+          <div class="badge-cloud">
+            <span class="tech-tag"><i class="fa-brands fa-node-js" style="color: #339933;"></i> Node.js</span>
+            <span class="tech-tag"><i class="fa-solid fa-server" style="color: #47A248;"></i> Express.js</span>
+            <span class="tech-tag"><i class="fa-solid fa-shield-halved" style="color: #FF9900;"></i> AWS SDK v3</span>
+            <span class="tech-tag"><i class="fa-solid fa-robot" style="color: #00F2FE;"></i> Gemini 1.5 API</span>
+          </div>
+        </div>
+        <!-- DB -->
+        <div class="tech-group">
+          <h3>Cloud Databases</h3>
+          <div class="badge-cloud">
+            <span class="tech-tag"><i class="fa-solid fa-database" style="color: #527FFF;"></i> Amazon DynamoDB</span>
+            <span class="tech-tag"><i class="fa-solid fa-database" style="color: #4479A1;"></i> Amazon RDS (MySQL)</span>
+            <span class="tech-tag"><i class="fa-solid fa-box" style="color: #FF9900;"></i> Amazon S3 Storage</span>
+          </div>
+        </div>
+        <!-- DevOps -->
+        <div class="tech-group">
+          <h3>DevOps & Cloud</h3>
+          <div class="badge-cloud">
+            <span class="tech-tag"><i class="fa-brands fa-github" style="color: #FFF;"></i> GitHub</span>
+            <span class="tech-tag"><i class="fa-brands fa-aws" style="color: #FF9900;"></i> AWS CodePipeline</span>
+            <span class="tech-tag"><i class="fa-solid fa-gears" style="color: #FF9900;"></i> AWS CodeBuild</span>
+            <span class="tech-tag"><i class="fa-brands fa-docker" style="color: #2496ED;"></i> Docker & ECR</span>
+            <span class="tech-tag"><i class="fa-solid fa-cubes-stacked" style="color: #FF9900;"></i> ECS Fargate</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AWS Infrastructure Footprint -->
+    <section id="aws-services" class="glass-card">
+      <h2 class="section-title">AWS Infrastructure Footprint</h2>
+      <p class="section-description">Leveraging Amazon Web Services to build an enterprise-ready infrastructure featuring high scalability, automated pipelines, and cloud security.</p>
+      
+      <div class="aws-services-grid">
+        <!-- 1 -->
+        <div class="aws-service-card">
+          <div class="aws-icon-wrapper"><i class="fa-solid fa-diagram-project"></i></div>
+          <div class="aws-service-content">
+            <h3>AWS CodePipeline <span>CI/CD</span></h3>
+            <p>Orchestrates continuous integration workflows. Automatically triggers CodeBuild execution whenever changes are committed to the GitHub repository.</p>
+          </div>
+        </div>
+        <!-- 2 -->
+        <div class="aws-service-card">
+          <div class="aws-icon-wrapper"><i class="fa-solid fa-gears"></i></div>
+          <div class="aws-service-content">
+            <h3>AWS CodeBuild <span>CI/CD Engine</span></h3>
+            <p>Executes build commands defined in buildspec.yml, tags Docker containers with Git SHA, pushes artifacts to ECR, and deploys ECS task revisions.</p>
+          </div>
+        </div>
+        <!-- 3 -->
+        <div class="aws-service-card">
+          <div class="aws-icon-wrapper"><i class="fa-solid fa-box-archive"></i></div>
+          <div class="aws-service-content">
+            <h3>Amazon ECR <span>Registry</span></h3>
+            <p>Stores private Docker container image repositories with encrypted vulnerability scanning and version tag tracking.</p>
+          </div>
+        </div>
+        <!-- 4 -->
+        <div class="aws-service-card">
+          <div class="aws-icon-wrapper"><i class="fa-solid fa-cubes-stacked"></i></div>
+          <div class="aws-service-content">
+            <h3>Amazon ECS (Fargate) <span>Serverless Compute</span></h3>
+            <p>Runs containerized application tasks elastically without provisioned EC2 instances, delivering zero-downtime rolling deployments.</p>
+          </div>
+        </div>
+        <!-- 5 -->
+        <div class="aws-service-card">
+          <div class="aws-icon-wrapper"><i class="fa-solid fa-bolt"></i></div>
+          <div class="aws-service-content">
+            <h3>Amazon DynamoDB <span>NoSQL Session</span></h3>
+            <p>Provides fast key-value storage for active shopping carts and user session states with single-digit millisecond latency.</p>
+          </div>
+        </div>
+        <!-- 6 -->
+        <div class="aws-service-card">
+          <div class="aws-icon-wrapper"><i class="fa-solid fa-database"></i></div>
+          <div class="aws-service-content">
+            <h3>Amazon RDS (MySQL) <span>Database</span></h3>
+            <p>Relational transactional store for catalog products, order histories, user profiles, and store analytics.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- My Technical Responsibilities -->
+    <section id="responsibilities" class="glass-card">
+      <h2 class="section-title">My Technical Responsibilities</h2>
+      <p class="section-description">Key actions and DevOps architectures I implemented to build and deploy SuperMarket Pro.</p>
+      
+      <div class="two-col-grid">
+        <div>
+          <ul class="custom-list">
+            <li><strong>CI/CD Pipeline Setup:</strong> Built end-to-end automated deployment pipeline using AWS CodePipeline, AWS CodeBuild, Amazon ECR, and Amazon ECS Fargate.</li>
+            <li><strong>Containerization:</strong> Wrote multi-stage <code style="color: var(--aws-orange);">Dockerfile</code> and <code style="color: var(--aws-orange);">buildspec.yml</code> files to optimize image size and automate ECR logins.</li>
+            <li><strong>DynamoDB Cart Integration:</strong> Engineered Node.js client service connecting to Amazon DynamoDB for real-time shopping cart session management.</li>
+            <li><strong>Amazon S3 Upload Pipeline:</strong> Implemented Express multipart file upload route to store high-res product images directly in S3.</li>
+            <li><strong>AWS Lambda & SNS Processing:</strong> Created serverless order event handler triggering post-payment stock adjustments and customer SMS/Email alerts.</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="custom-list">
+            <li><strong>Zero-Downtime Deployment Strategy:</strong> Configured rolling deployment strategies in ECS Fargate behind an Application Load Balancer.</li>
+            <li><strong>Kubernetes Manifests (EKS):</strong> Authored Kubernetes deployments, services, ingress rules, secret maps, and config maps for EKS compatibility.</li>
+            <li><strong>Gemini AI Assistant:</strong> Integrated Google Gemini API for personalized product search and smart recipe ingredient generation.</li>
+            <li><strong>Database Parity & Seeding:</strong> Structured MySQL RDS schemas with proper indexing, primary keys, and sample catalog items.</li>
+            <li><strong>Security Hardening:</strong> Configured IAM roles with least-privilege policies for CodeBuild, ECS Task Execution, and DynamoDB access.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Implementation Timeline -->
+    <section id="implementation" class="glass-card">
+      <h2 class="section-title">Implementation Timeline</h2>
+      <p class="section-description">A systematic engineering lifecycle from architecture planning to live serverless deployment.</p>
+      
+      <div class="timeline">
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>Phase 1: Architecture Planning</h3>
+            <p>Designing cloud architecture diagrams, selecting AWS datastores (DynamoDB + RDS + S3), and defining CI/CD specifications.</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>Phase 2: Full-Stack & API Development</h3>
+            <p>Building Node.js Express REST APIs, designing e-commerce storefront UI, dynamic cart controllers, and admin CRUD routes.</p>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>Phase 3: Containerization & Docker</h3>
+            <p>Creating optimized multi-stage Dockerfiles, `.dockerignore`, environment parameterization, and testing local container execution.</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>Phase 4: Cloud Services Integration</h3>
+            <p>Connecting AWS S3 for product images, DynamoDB for cart states, RDS for MySQL transactions, and Lambda for order processing.</p>
+          </div>
+        </div>
+        <div class="timeline-item left">
+          <div class="timeline-content">
+            <h3>Phase 5: Automated Pipeline & Buildspec</h3>
+            <p>Configuring GitHub webhooks, setting up AWS CodePipeline, and writing buildspec.yml for AWS CodeBuild & Amazon ECR authentication.</p>
+          </div>
+        </div>
+        <div class="timeline-item right">
+          <div class="timeline-content">
+            <h3>Phase 6: ECS Fargate Deployment</h3>
+            <p>Provisioning Amazon ECS Task Definitions, Fargate serverless clusters, Application Load Balancers, and verifying live rollout status.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project Metrics -->
+    <section id="metrics" class="glass-card">
+      <h2 class="section-title">Key Project Metrics</h2>
+      <p class="section-description">Quantitative indicators demonstrating the scope, performance, and automation of the SuperMarket Pro platform.</p>
+      
+      <div class="metrics-grid">
+        <div class="metric-item">
+          <div class="metric-value">0 sec</div>
+          <div class="metric-label">Deployment Downtime</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-value">6</div>
+          <div class="metric-label">AWS Services Integrated</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-value">100%</div>
+          <div class="metric-label">Automated CI/CD Pipeline</div>
+        </div>
+        <div class="metric-item">
+          <div class="metric-value">&lt; 5ms</div>
+          <div class="metric-label">DynamoDB Cart Read Latency</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Engineering Challenges -->
+    <section id="challenges" class="glass-card">
+      <h2 class="section-title">Engineering Challenges</h2>
+      <p class="section-description">How specific cloud configuration, buildspec, and database parity challenges were solved.</p>
+      
+      <div class="challenge-grid">
+        <!-- Card 1 -->
+        <div class="info-card challenge-card">
+          <h3>ECR Docker Authentication in CodeBuild</h3>
+          <div class="pill-group">
+            <div class="challenge-pill">
+              <h4>Problem</h4>
+              <p>AWS CodeBuild phase failed to push built container images to Amazon ECR due to standard Docker login permission drops.</p>
+            </div>
+            <div class="challenge-pill sol">
+              <h4>Solution</h4>
+              <p>Configured AWS STS caller identity in <code style="color: var(--aws-orange);">buildspec.yml</code> and fetched dynamic login passwords using AWS CLI before build phases.</p>
+            </div>
+            <div class="challenge-pill out">
+              <h4>Outcome</h4>
+              <p>Achieved seamless, automated container builds and pushes to ECR tagged with Git commit SHAs.</p>
+            </div>
+          </div>
+        </div>
+        <!-- Card 2 -->
+        <div class="info-card challenge-card">
+          <h3>High-Concurrency Cart State Locking</h3>
+          <div class="pill-group">
+            <div class="challenge-pill">
+              <h4>Problem</h4>
+              <p>Storing user cart session states in MySQL created table locks and dropped requests under concurrent add-to-cart operations.</p>
+            </div>
+            <div class="challenge-pill sol">
+              <h4>Solution</h4>
+              <p>Decoupled cart states into Amazon DynamoDB key-value tables indexed by unique session tokens with local storage fallbacks.</p>
+            </div>
+            <div class="challenge-pill out">
+              <h4>Outcome</h4>
+              <p>Reduced cart interaction response latency to under 5ms and eliminated database lock contention completely.</p>
+            </div>
+          </div>
+        </div>
+        <!-- Card 3 -->
+        <div class="info-card challenge-card">
+          <h3>Zero-Downtime ECS Fargate Task Updates</h3>
+          <div class="pill-group">
+            <div class="challenge-pill">
+              <h4>Problem</h4>
+              <p>Updating live container deployments caused temporary 502 Bad Gateway errors while old containers terminated.</p>
+            </div>
+            <div class="challenge-pill sol">
+              <h4>Solution</h4>
+              <p>Configured ECS Service rolling deployment parameters with Application Load Balancer target group deregistration delays.</p>
+            </div>
+            <div class="challenge-pill out">
+              <h4>Outcome</h4>
+              <p>Ensured new container tasks pass health checks before traffic shifts, guaranteeing 100% continuous uptime.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recruiter Summary Focus -->
+    <section id="why-this-matters" class="glass-card recruiter-summary-card">
+      <h2 class="section-title" style="color: var(--aws-orange);">Why This Project Matters</h2>
+      <p class="section-description" style="color: var(--text-primary); font-weight: 500;">Why this project demonstrates my readiness for Cloud Engineer, DevOps, and Full-Stack roles:</p>
+      
+      <ul class="custom-list">
+        <li><strong>Hands-on AWS DevOps Mastery:</strong> Demonstrates real-world experience building automated pipelines with GitHub, CodePipeline, CodeBuild, ECR, and ECS Fargate.</li>
+        <li><strong>Containerization & Orchestration:</strong> Proves deep Docker proficiency, writing clean multi-stage Dockerfiles and Kubernetes manifests.</li>
+        <li><strong>Serverless & Microservices Architecture:</strong> Showcases event-driven decoupled systems using DynamoDB, AWS Lambda, S3, and SNS.</li>
+        <li><strong>Enterprise Security & IAM:</strong> Implements Principle of Least Privilege with scoped IAM Execution roles and environment variable management.</li>
+        <li><strong>Recruiter-Ready Code Quality:</strong> Built with clean Git workflow, comprehensive documentation, and production-tested deployment scripts.</li>
+      </ul>
+
+      <div class="links-wrapper">
+        <a href="https://github.com/ajithkumar31082004-bit/Super-Market-Website" class="btn" target="_blank">
+          <i class="fa-brands fa-github"></i> GitHub Repository
+        </a>
+        <a href="index.html" class="btn btn-secondary" target="_blank">
+          <i class="fa-solid fa-shop"></i> View SuperMarket App
+        </a>
+        <a href="README.md" class="btn btn-secondary" target="_blank">
+          <i class="fa-solid fa-book"></i> Read documentation
+        </a>
+      </div>
+    </section>
+
+  </div>
+
+</body>
+</html>

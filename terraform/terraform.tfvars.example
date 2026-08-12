@@ -1,0 +1,22 @@
+# AWS Configuration
+aws_region   = "ap-south-1"
+project_name = "supermarket"
+environment  = "dev"
+
+# Port & Containers
+container_port      = 5000
+ecr_repository_name = "dev/super_market"
+
+# Datastores
+dynamodb_cart_table_name = "SuperMarketCart"
+s3_bucket_name           = "supermarket-assets-bucket-unique"
+
+# Database Configuration
+db_name     = "supermarket_db"
+db_username = "admin"
+db_password = "SuperMarketSecurePass123!"
+
+# GitHub & CI/CD Pipeline
+github_repo_owner = "ajithkumar31082004-bit"
+github_repo_name  = "Super-Market-Website"
+github_branch      = "main"
