@@ -26,8 +26,8 @@ phases:
       - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_COMMIT_ID | cut -c 1-7)
       - "IMAGE_TAG=${COMMIT_HASH:-latest}"
-      - echo "Target Repository URI: ${REPOSITORY_URI}"
-      - echo "Image Tag: ${IMAGE_TAG}"
+      - 'echo "Target Repository URI: ${REPOSITORY_URI}"'
+      - 'echo "Image Tag: ${IMAGE_TAG}"'
 
   build:
     commands:
