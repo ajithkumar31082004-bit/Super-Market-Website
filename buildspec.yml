@@ -3,11 +3,9 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo "Installing kubectl..."
-      - curl -o kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.28.3/2023-11-14/bin/linux/amd64/kubectl
-      - chmod +x ./kubectl
-      - mv ./kubectl /usr/local/bin/kubectl
-      - kubectl version --client
+      - echo "Installing dependencies..."
+      - apt-get update
+      - apt-get install -y curl
 
   pre_build:
     commands:
@@ -18,23 +16,25 @@ phases:
       - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_COMMIT_ID | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:-latest}
-      - echo "Target Repository URI: ${REPOSITORY_URI}"
-      - echo "Image Tag: ${IMAGE_TAG}"
+      - echo "Target Repository URI - ${REPOSITORY_URI}"
+      - echo "Image Tag - ${IMAGE_TAG}"
 
   build:
     commands:
-      - echo "Building Docker image..."
+      - echo "Building Docker image on $(date)"
       - docker build -t ${REPOSITORY_URI}:latest .
       - docker tag ${REPOSITORY_URI}:latest ${REPOSITORY_URI}:${IMAGE_TAG}
 
   post_build:
     commands:
-      - echo "Pushing Docker image to Amazon ECR..."
+      - echo "Pushing Docker image to Amazon ECR on $(date)"
       - docker push ${REPOSITORY_URI}:latest
       - docker push ${REPOSITORY_URI}:${IMAGE_TAG}
       - echo "Docker image pushed successfully"
       - printf '[{"name":"supermarket-container","imageUri":"%s"}]' ${REPOSITORY_URI}:${IMAGE_TAG} > imagedefinitions.json
+      - cat imagedefinitions.json
 
 artifacts:
   files:
     - imagedefinitions.json
+  name: BuildArtifact
