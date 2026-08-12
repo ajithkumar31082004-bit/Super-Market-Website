@@ -1,12 +1,6 @@
 version: 0.2
 
 phases:
-  install:
-    commands:
-      - echo "Installing dependencies..."
-      - apt-get update
-      - apt-get install -y curl
-
   pre_build:
     commands:
       - echo "Logging in to Amazon ECR..."
