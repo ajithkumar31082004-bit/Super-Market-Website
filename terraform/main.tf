@@ -518,7 +518,7 @@ resource "aws_iam_role_policy" "codebuild_policy" {
     Statement = [
       {
         Effect   = "Allow"
-        Action   = ["logs:*", "s3:*", "ecr:*", "ecs:*", "iam:PassRole"]
+        Action   = ["logs:*", "s3:*", "ecr:*", "ecs:*", "eks:*", "iam:PassRole"]
         Resource = "*"
       }
     ]
