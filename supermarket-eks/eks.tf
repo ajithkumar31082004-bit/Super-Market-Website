@@ -41,6 +41,7 @@ resource "aws_eks_node_group" "main" {
   node_group_name = "${var.project_name}-node-group"
   node_role_arn   = aws_iam_role.eks_node_role.arn
   subnet_ids      = [aws_subnet.private_1.id, aws_subnet.private_2.id]
+  ami_type        = "AL2023_x86_64_STANDARD"
   instance_types  = var.eks_node_instance_types
   disk_size       = var.eks_node_disk_size
 
