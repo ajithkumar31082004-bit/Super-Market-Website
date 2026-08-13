@@ -17,7 +17,7 @@ phases:
       - echo "Image Tag         : ${IMAGE_TAG}"
       # ── Install kubectl ──
       - echo "==> Installing kubectl..."
-      - curl -o kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.29.0/2024-01-04/bin/linux/amd64/kubectl
+      - curl -LO "https://dl.k8s.io/release/v1.30.0/bin/linux/amd64/kubectl"
       - chmod +x ./kubectl
       - mv ./kubectl /usr/local/bin/kubectl
       - kubectl version --client
