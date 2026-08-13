@@ -22,6 +22,11 @@ resource "aws_eks_cluster" "main" {
     aws_cloudwatch_log_group.eks_control_plane,
   ]
 
+  access_config {
+    authentication_mode                         = "API_AND_CONFIG_MAP"
+    bootstrap_cluster_creator_admin_permissions = true
+  }
+
   tags = {
     Name = "${var.project_name}-eks-cluster"
   }
@@ -173,3 +178,24 @@ resource "helm_release" "aws_load_balancer_controller" {
     aws_iam_openid_connect_provider.eks_oidc,
   ]
 }
+
+# ============================================================
+# EKS ACCESS ENTRY FOR CODEBUILD ROLE
+# Grants CodeBuild IAM role RBAC permissions to run kubectl commands
+# ============================================================
+resource "aws_eks_access_entry" "codebuild" {
+  cluster_name  = aws_eks_cluster.main.name
+  principal_arn = aws_iam_role.codebuild_role.arn
+  type          = "STANDARD"
+}
+
+resource "aws_eks_access_policy_association" "codebuild_admin" {
+  cluster_name  = aws_eks_cluster.main.name
+  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  principal_arn = aws_iam_role.codebuild_role.arn
+
+  access_scope {
+    type = "cluster"
+  }
+}
+
