@@ -350,7 +350,7 @@ resource "aws_iam_role_policy_attachment" "ebs_csi_driver_policy" {
 # 6. CODEBUILD ROLE (build + EKS deploy)
 # ============================================================
 resource "aws_iam_role" "codebuild_role" {
-  name = "${var.project_name}-codebuild-role"
+  name = "${var.project_name}-eks-codebuild-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -417,7 +417,7 @@ resource "aws_iam_role_policy" "codebuild_eks_access" {
 # 7. CODEPIPELINE ROLE
 # ============================================================
 resource "aws_iam_role" "codepipeline_role" {
-  name = "${var.project_name}-codepipeline-role"
+  name = "${var.project_name}-eks-pipeline-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
