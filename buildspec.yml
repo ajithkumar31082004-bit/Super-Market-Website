@@ -42,6 +42,8 @@ phases:
       - echo "Docker image pushed successfully."
       - echo "Updating kubeconfig for EKS cluster..."
       - aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION}
+      - echo "Applying Kubernetes namespace..."
+      - kubectl apply -f k8s/namespace.yaml
       - echo "Applying Kubernetes manifests..."
       - kubectl apply -f k8s/
       - echo "Deploying image to EKS..."
