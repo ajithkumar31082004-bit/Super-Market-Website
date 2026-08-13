@@ -2,26 +2,47 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: supermarket-deployment
-  namespace: default
+  namespace: supermarket
   labels:
     app: supermarket-app
+    version: "1.0"
 spec:
   replicas: 3
   selector:
     matchLabels:
       app: supermarket-app
+  # Rolling update strategy — zero downtime deploys
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   template:
     metadata:
       labels:
         app: supermarket-app
     spec:
+      # IRSA: use the service account that assumes the app pod IAM role
+      serviceAccountName: supermarket-service-account
+
+      # Spread pods across availability zones
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: supermarket-app
+
       containers:
         - name: supermarket-container
+          # IMAGE_URI is substituted by buildspec.yml during CI/CD deploy
           image: 131708658201.dkr.ecr.ap-south-1.amazonaws.com/dev/super_market:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
               name: http
+              protocol: TCP
           envFrom:
             - configMapRef:
                 name: supermarket-config
@@ -40,9 +61,19 @@ spec:
               port: 5000
             initialDelaySeconds: 10
             periodSeconds: 10
+            failureThreshold: 3
           livenessProbe:
             httpGet:
               path: /health
               port: 5000
             initialDelaySeconds: 15
             periodSeconds: 20
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            failureThreshold: 12
+            periodSeconds: 5
+      # Graceful shutdown timeout
+      terminationGracePeriodSeconds: 30

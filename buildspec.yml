@@ -1,30 +1,71 @@
 version: 0.2
 
 phases:
+  # ──────────────────────────────────────────────────────────
+  # PRE-BUILD: Login to ECR + resolve image tag
+  # ──────────────────────────────────────────────────────────
   pre_build:
     commands:
-      - echo "Logging in to Amazon ECR..."
+      - echo "==> Logging in to Amazon ECR..."
       - ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
       - ECR_REGISTRY="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
       - REPOSITORY_URI="${ECR_REGISTRY}/${ECR_REPOSITORY}"
       - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_COMMIT_ID | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:-latest}
-      - echo "Target Repository URI - ${REPOSITORY_URI}"
-      - echo "Image Tag - ${IMAGE_TAG}"
+      - echo "Target Repository : ${REPOSITORY_URI}"
+      - echo "Image Tag         : ${IMAGE_TAG}"
+      # ── Install kubectl ──
+      - echo "==> Installing kubectl..."
+      - curl -o kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.29.0/2024-01-04/bin/linux/amd64/kubectl
+      - chmod +x ./kubectl
+      - mv ./kubectl /usr/local/bin/kubectl
+      - kubectl version --client
 
+  # ──────────────────────────────────────────────────────────
+  # BUILD: Build Docker image and tag it
+  # ──────────────────────────────────────────────────────────
   build:
     commands:
-      - echo "Building Docker image on $(date)"
+      - echo "==> Building Docker image on $(date)..."
       - docker build -t ${REPOSITORY_URI}:latest .
       - docker tag ${REPOSITORY_URI}:latest ${REPOSITORY_URI}:${IMAGE_TAG}
+      - echo "==> Build complete."
 
+  # ──────────────────────────────────────────────────────────
+  # POST-BUILD: Push to ECR → Deploy to EKS via kubectl
+  # ──────────────────────────────────────────────────────────
   post_build:
     commands:
-      - echo "Pushing Docker image to Amazon ECR on $(date)"
+      # Push image to ECR
+      - echo "==> Pushing Docker image to Amazon ECR on $(date)..."
       - docker push ${REPOSITORY_URI}:latest
       - docker push ${REPOSITORY_URI}:${IMAGE_TAG}
-      - echo "Docker image pushed successfully"
+      - echo "Docker image pushed successfully."
+
+      # Configure kubectl to use the EKS cluster
+      - echo "==> Updating kubeconfig for cluster ${EKS_CLUSTER_NAME}..."
+      - aws eks update-kubeconfig --name ${EKS_CLUSTER_NAME} --region ${AWS_REGION}
+
+      # Rolling update — set the new image on the deployment
+      - echo "==> Deploying image ${REPOSITORY_URI}:${IMAGE_TAG} to EKS..."
+      - |
+        kubectl set image deployment/supermarket-deployment \
+          supermarket-container=${REPOSITORY_URI}:${IMAGE_TAG} \
+          --namespace=${K8S_NAMESPACE}
+
+      # Wait for rollout to complete (timeout 300s)
+      - echo "==> Waiting for rollout to complete..."
+      - |
+        kubectl rollout status deployment/supermarket-deployment \
+          --namespace=${K8S_NAMESPACE} \
+          --timeout=300s
+
+      # Print final pod status
+      - echo "==> Deployment complete. Pod status:"
+      - kubectl get pods --namespace=${K8S_NAMESPACE} -l app=supermarket-app
+
+      # Write imagedefinitions.json (kept for audit / artifact traceability)
       - printf '[{"name":"supermarket-container","imageUri":"%s"}]' ${REPOSITORY_URI}:${IMAGE_TAG} > imagedefinitions.json
       - cat imagedefinitions.json
 

@@ -2,17 +2,32 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: supermarket-config
-  namespace: default
+  namespace: supermarket
+  labels:
+    app: supermarket-app
 data:
   PORT: "5000"
   NODE_ENV: "production"
-  DB_HOST: "supermarket-db.xxxxxx.us-east-1.rds.amazonaws.com"
+
+  # RDS — Update DB_HOST with the terraform output `rds_endpoint` after apply
+  # Run: terraform output rds_endpoint
+  DB_HOST: "supermarket-mysql.xxxxxx.ap-south-1.rds.amazonaws.com"
   DB_NAME: "supermarket_db"
   DB_USER: "admin"
   DB_PORT: "3306"
-  AWS_REGION: "us-east-1"
-  AWS_S3_BUCKET_NAME: "supermarket-product-images"
-  AWS_SNS_TOPIC_ARN: "arn:aws:sns:us-east-1:123456789012:SuperMarketOrderNotifications"
+
+  # AWS Region
+  AWS_REGION: "ap-south-1"
+
+  # S3 — Product images bucket (must match terraform.tfvars s3_bucket_name)
+  AWS_S3_BUCKET_NAME: "supermarket-product-images-unique"
+
+  # SNS
+  AWS_SNS_TOPIC_ARN: "arn:aws:sns:ap-south-1:131708658201:SuperMarketOrderNotifications"
+
+  # DynamoDB (must match terraform.tfvars table names)
   AWS_DYNAMODB_CARTS_TABLE: "SuperMarket_Carts"
   AWS_DYNAMODB_LOGS_TABLE: "SuperMarket_Logs"
+
+  # Lambda background worker function name
   AWS_LAMBDA_BG_WORKER: "supermarket-order-processor"
