@@ -3,295 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order History - SuperMarket Pro</title>
+    <title>My Orders & Live Tracking - SuperMarket Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 text-gray-800">
     <!-- Header -->
-    <header class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-4">
+    <header class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-40 backdrop-blur-md bg-white/95">
+        <div class="container mx-auto px-4 py-3.5">
             <div class="flex justify-between items-center">
                 <!-- Logo -->
                 <a href="index.html" class="flex items-center space-x-3">
-                    <div class="bg-green-600 text-white p-2 rounded-lg">
-                        <i class="fas fa-shopping-cart text-2xl"></i>
+                    <div class="bg-green-600 text-white p-2.5 rounded-xl shadow-md shadow-green-600/20">
+                        <i class="fas fa-shopping-cart text-xl"></i>
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-900">Super<span class="text-green-600">Market</span>Pro</h1>
-                        <p class="text-xs text-gray-500 hidden sm:block">Fresh Groceries Delivered</p>
+                        <h1 class="text-2xl font-black text-gray-900 tracking-tight">Super<span class="text-green-600">Market</span>Pro</h1>
+                        <p class="text-[11px] text-gray-400 font-medium hidden sm:block">Farm Fresh & Express Delivered</p>
                     </div>
                 </a>
 
                 <!-- Navigation (Desktop) -->
-                <nav class="hidden md:flex space-x-8">
-                    <a href="index.html" class="text-gray-700 hover:text-green-600 font-medium flex items-center space-x-2">
-                        <i class="fas fa-home"></i>
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-green-600 font-semibold flex items-center space-x-2 transition">
+                        <i class="fas fa-home text-sm"></i>
                         <span>Home</span>
                     </a>
-                    <a href="shop.html" class="text-gray-700 hover:text-green-600 font-medium flex items-center space-x-2">
-                        <i class="fas fa-store"></i>
+                    <a href="shop.html" class="text-gray-600 hover:text-green-600 font-semibold flex items-center space-x-2 transition">
+                        <i class="fas fa-store text-sm"></i>
                         <span>Shop</span>
                     </a>
-                    <a href="cart.html" class="text-gray-700 hover:text-green-600 font-medium flex items-center space-x-2">
-                        <i class="fas fa-shopping-cart"></i>
+                    <a href="cart.html" class="text-gray-600 hover:text-green-600 font-semibold flex items-center space-x-2 transition">
+                        <i class="fas fa-shopping-cart text-sm"></i>
                         <span>Cart</span>
                     </a>
-                    <a href="order-history.html" class="text-green-600 font-bold flex items-center space-x-2">
-                        <i class="fas fa-history"></i>
+                    <a href="order-history.html" class="text-green-600 font-extrabold flex items-center space-x-2 border-b-2 border-green-600 pb-0.5">
+                        <i class="fas fa-history text-sm"></i>
                         <span>Orders</span>
                     </a>
-                    <a href="admin.html" id="adminNavLink" class="hidden text-gray-700 hover:text-green-600 font-medium flex items-center space-x-2">
-                        <i class="fas fa-cog"></i>
-                        <span>Admin</span>
+                    <a href="user-dashboard.html" class="text-gray-600 hover:text-green-600 font-semibold flex items-center space-x-2 transition">
+                        <i class="fas fa-user-circle text-sm"></i>
+                        <span>My Account</span>
                     </a>
                 </nav>
 
-                <!-- Right Side Actions & Mobile Toggle -->
+                <!-- Right Side Actions & User Menu -->
                 <div class="flex items-center space-x-4">
-                    <a href="cart.html" class="relative p-2 text-gray-700 hover:text-green-600">
-                        <i class="fas fa-shopping-cart text-2xl"></i>
-                        <span id="cartCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                    <a href="cart.html" class="relative p-2.5 bg-green-50 hover:bg-green-100 text-green-700 rounded-xl transition flex items-center">
+                        <i class="fas fa-shopping-bag text-lg"></i>
+                        <span id="cartCount" class="absolute -top-1.5 -right-1.5 bg-green-600 text-white text-[11px] font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-md">0</span>
                     </a>
-                    <!-- User Account Dropdown -->
+
                     <div class="relative group hidden sm:block">
-                        <button class="flex items-center space-x-2 p-1 focus:outline-none">
-                            <div class="w-9 h-9 bg-green-100 rounded-full flex items-center justify-center">
-                                <i class="fas fa-user text-green-600"></i>
+                        <button class="flex items-center space-x-2 p-1.5 rounded-xl hover:bg-gray-100 focus:outline-none transition">
+                            <div class="w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-xs">
+                                <i class="fas fa-user"></i>
                             </div>
-                            <span id="navUserName" class="text-sm font-medium text-gray-700 hidden"></span>
-                            <i class="fas fa-chevron-down text-xs text-gray-600"></i>
+                            <span id="navUserName" class="text-xs font-bold text-gray-700 hidden"></span>
+                            <i class="fas fa-chevron-down text-[10px] text-gray-400"></i>
                         </button>
-                        <div class="absolute right-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-gray-100 hidden group-hover:block z-50">
-                            <!-- Shown when NOT logged in -->
+                        <div class="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 hidden group-hover:block z-50 p-2">
                             <div id="dropdownGuest">
-                                <a href="login.html" class="block px-4 py-3 hover:bg-green-50 text-gray-700 rounded-t-xl">
+                                <a href="login.html" class="block px-4 py-2.5 hover:bg-green-50 text-gray-700 rounded-xl font-semibold text-sm">
                                     <i class="fas fa-sign-in-alt mr-2 text-green-600"></i>Login / Sign Up
                                 </a>
                             </div>
-                            <!-- Shown when logged in -->
                             <div id="dropdownUser" class="hidden">
-                                <div class="px-4 py-3 border-b border-gray-100">
-                                    <p class="text-xs text-gray-400">Signed in as</p>
-                                    <p id="dropdownUserName" class="text-sm font-semibold text-gray-800 truncate"></p>
+                                <div class="px-3 py-2 border-b border-gray-100 mb-1">
+                                    <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Signed in as</p>
+                                    <p id="dropdownUserName" class="text-xs font-bold text-gray-800 truncate"></p>
                                 </div>
-                                <a href="user-dashboard.html" class="block px-4 py-2.5 hover:bg-green-50 text-gray-700 flex items-center text-sm font-medium">
+                                <a href="user-dashboard.html" class="block px-3 py-2 hover:bg-green-50 text-gray-700 rounded-xl text-xs font-semibold">
                                     <i class="fas fa-user-circle mr-2 text-green-600"></i>My Dashboard
                                 </a>
-                                <a href="order-history.html" class="block px-4 py-2.5 hover:bg-green-50 text-gray-700 flex items-center text-sm font-medium">
-                                    <i class="fas fa-history mr-2 text-green-600"></i>My Orders
+                                <a id="dropdownStaffLink" href="staff-dashboard.html" class="hidden px-3 py-2 hover:bg-blue-50 text-blue-700 rounded-xl text-xs font-semibold">
+                                    <i class="fas fa-boxes-stacked mr-2 text-blue-600"></i>Staff Terminal
                                 </a>
-                                <a id="dropdownStaffLink" href="staff-dashboard.html" class="hidden px-4 py-2.5 hover:bg-blue-50 text-blue-700 flex items-center text-sm font-medium">
-                                    <i class="fas fa-boxes-stacked mr-2 text-blue-600"></i>Staff Operations
-                                </a>
-                                <a id="dropdownAdminLink" href="admin.html" class="hidden px-4 py-2.5 hover:bg-green-50 text-gray-700 flex items-center text-sm font-medium">
-                                    <i class="fas fa-cog mr-2 text-green-600"></i>Admin Panel
+                                <a id="dropdownAdminLink" href="admin.html" class="hidden px-3 py-2 hover:bg-green-50 text-gray-700 rounded-xl text-xs font-semibold">
+                                    <i class="fas fa-cog mr-2 text-green-600"></i>Admin Center
                                 </a>
                                 <div class="border-t border-gray-100 my-1"></div>
-                                <button onclick="auth.logout()" class="w-full text-left px-4 py-2.5 hover:bg-red-50 text-red-600 rounded-b-xl flex items-center text-sm font-medium">
+                                <button onclick="auth.logout()" class="w-full text-left px-3 py-2 hover:bg-red-50 text-red-600 rounded-xl text-xs font-semibold">
                                     <i class="fas fa-sign-out-alt mr-2"></i>Logout
                                 </button>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Mobile Menu Button -->
-                    <button id="mobileMenuBtn" class="md:hidden text-gray-700 hover:text-green-600 text-2xl focus:outline-none p-1">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Mobile Navigation Menu Dropdown -->
-            <div id="mobileNavMenu" class="hidden md:hidden pt-4 pb-2 border-t border-gray-100 mt-3 space-y-2">
-                <a href="index.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">
-                    <i class="fas fa-home mr-2 text-green-600"></i>Home
-                </a>
-                <a href="shop.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">
-                    <i class="fas fa-store mr-2 text-green-600"></i>Shop
-                </a>
-                <a href="cart.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">
-                    <i class="fas fa-shopping-cart mr-2 text-green-600"></i>Cart
-                </a>
-                <a href="order-history.html" class="block px-3 py-2 rounded-md text-green-600 bg-green-50 font-bold">
-                    <i class="fas fa-history mr-2 text-green-600"></i>Orders
-                </a>
-                <a href="user-dashboard.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">
-                    <i class="fas fa-user-circle mr-2 text-green-600"></i>My Dashboard
-                </a>
-                <a href="staff-dashboard.html" id="mobileStaffLink" class="hidden px-3 py-2 rounded-md text-blue-700 bg-blue-50 font-medium">
-                    <i class="fas fa-boxes-stacked mr-2"></i>Staff Operations
-                </a>
-                <a href="admin.html" id="mobileAdminLink" class="hidden px-3 py-2 rounded-md text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">
-                    <i class="fas fa-cog mr-2 text-green-600"></i>Admin Panel
-                </a>
-                <div id="mobileGuestLinks">
-                    <a href="login.html" class="block px-3 py-2 rounded-md text-green-700 bg-green-50 font-semibold">
-                        <i class="fas fa-sign-in-alt mr-2"></i>Login / Sign Up
-                    </a>
-                </div>
-                <div id="mobileUserLinks" class="hidden">
-                    <button onclick="auth.logout()" class="w-full text-left px-3 py-2 rounded-md text-red-600 hover:bg-red-50 font-semibold">
-                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                    </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Order History -->
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-8">Order History</h1>
-        
-        <!-- Filters -->
-        <div class="bg-white rounded-xl shadow p-6 mb-6">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div class="flex space-x-4">
-                    <select class="p-3 border rounded-lg">
-                        <option>All Orders</option>
-                        <option>Past 30 Days</option>
-                        <option>Past 3 Months</option>
-                        <option>2024</option>
-                    </select>
-                    <select class="p-3 border rounded-lg">
-                        <option>All Status</option>
-                        <option>Processing</option>
-                        <option>Delivered</option>
-                        <option>Cancelled</option>
-                    </select>
-                </div>
-                <div class="relative">
-                    <input type="text" placeholder="Search orders..." class="p-3 border rounded-lg pl-10">
-                    <i class="fas fa-search absolute left-3 top-4 text-gray-400"></i>
-                </div>
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <!-- Page Title & Stats -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+            <div>
+                <h1 class="text-3xl font-black text-gray-900">My Orders & Live Tracking</h1>
+                <p class="text-gray-500 text-sm mt-1">Real-time status updates and order records from SuperMarket Pro</p>
             </div>
+            <a href="shop.html" class="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-5 py-3 rounded-2xl shadow-lg shadow-green-600/20 transition">
+                <i class="fas fa-cart-plus"></i> Shop More Groceries
+            </a>
         </div>
 
-        <!-- Orders List -->
+        <!-- Orders Container -->
         <div id="ordersList" class="space-y-6">
-            <!-- Orders will load here -->
-            <div class="text-center py-12">
-                <i class="fas fa-history text-5xl text-gray-300 mb-4"></i>
-                <h3 class="text-xl font-semibold mb-2">No orders yet</h3>
-                <p class="text-gray-600 mb-6">Start shopping to see your order history here!</p>
-                <a href="shop.html" 
-                   class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700">
-                    <i class="fas fa-store mr-2"></i>Start Shopping
+            <!-- Rendered by loadOrders() -->
+            <div class="text-center py-16 bg-white rounded-3xl border border-gray-100 p-8">
+                <div class="w-16 h-16 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                    <i class="fas fa-history"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">No orders placed yet</h3>
+                <p class="text-gray-500 text-sm mb-6">Explore our 50+ fresh grocery items with 30-minute delivery.</p>
+                <a href="shop.html" class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold text-xs px-6 py-3 rounded-xl transition">
+                    Start Shopping
                 </a>
             </div>
         </div>
     </div>
 
-    <script>
-        // Load orders
-        function loadOrders() {
-            const orders = JSON.parse(localStorage.getItem('orders')) || [];
-            const container = document.getElementById('ordersList');
-            
-            if (orders.length === 0) {
-                return; // Show default empty message
-            }
-            
-            container.innerHTML = '';
-            
-            // Sort by date (newest first)
-            orders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
-            
-            orders.forEach(order => {
-                const orderCard = document.createElement('div');
-                orderCard.className = 'bg-white rounded-xl shadow overflow-hidden';
-                orderCard.innerHTML = `
-                    <div class="p-6">
-                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-4">
-                            <div>
-                                <h3 class="text-xl font-bold mb-1">Order #${order.orderId}</h3>
-                                <p class="text-gray-600">Placed on ${new Date(order.orderDate).toLocaleDateString('en-IN')}</p>
-                            </div>
-                            <div class="mt-2 md:mt-0">
-                                <span class="px-4 py-2 rounded-full text-sm ${
-                                    order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
-                                    order.status === 'Processing' ? 'bg-yellow-100 text-yellow-800' :
-                                    order.status === 'Cancelled' ? 'bg-red-100 text-red-800' :
-                                    'bg-gray-100 text-gray-800'
-                                }">
-                                    ${order.status || 'Processing'}
-                                </span>
-                            </div>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                            <div>
-                                <h4 class="font-semibold mb-2">Delivery Address</h4>
-                                <p class="text-gray-700">${order.customerInfo.address}</p>
-                                <p class="text-gray-700">${order.customerInfo.city}, ${order.customerInfo.state}</p>
-                                <p class="text-gray-700">PIN: ${order.customerInfo.pinCode}</p>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold mb-2">Payment</h4>
-                                <p class="text-gray-700">${order.paymentMethod}</p>
-                                <p class="text-gray-700">Status: Paid</p>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold mb-2">Order Total</h4>
-                                <p class="text-2xl font-bold text-green-600">₹${order.orderSummary.total.toFixed(2)}</p>
-                                <p class="text-sm text-gray-600">${order.orderSummary.items.length} items</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <a href="billing.html?order=${order.orderId}" 
-                                   class="text-green-600 hover:text-green-700 font-semibold">
-                                    <i class="fas fa-file-invoice mr-2"></i>View Invoice
-                                </a>
-                            </div>
-                            <div class="flex space-x-3">
-                                <button onclick="reorder(${order.orderId})" 
-                                        class="bg-green-100 text-green-700 px-4 py-2 rounded-lg font-semibold hover:bg-green-200">
-                                    <i class="fas fa-redo mr-2"></i>Reorder
-                                </button>
-                                <button onclick="trackOrder(${order.orderId})" 
-                                        class="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-semibold hover:bg-blue-200">
-                                    <i class="fas fa-truck mr-2"></i>Track
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(orderCard);
-            });
-        }
-        
-        function reorder(orderId) {
-            const orders = JSON.parse(localStorage.getItem('orders')) || [];
-            const order = orders.find(o => o.orderId === orderId);
-            
-            if (order) {
-                // Add items to cart
-                const cart = JSON.parse(localStorage.getItem('cart')) || [];
-                order.orderSummary.items.forEach(item => {
-                    cart.push({
-                        ...item,
-                        quantity: item.quantity
-                    });
-                });
-                
-                localStorage.setItem('cart', JSON.stringify(cart));
-                alert('Items added to cart!');
-                window.location.href = 'cart.html';
-            }
-        }
-        
-        function trackOrder(orderId) {
-            alert(`Tracking order #${orderId}\nStatus: Out for delivery\nEstimated delivery: Today, 2-4 PM`);
-        }
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', loadOrders);
-    </script>
+    <!-- Scripts -->
     <script src="js/auth.js"></script>
+    <script src="js/products.js"></script>
     <script src="js/cart.js"></script>
     <script src="js/navbar.js"></script>
     <script src="js/ai-assistant.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            if (typeof cart !== 'undefined' && cart.updateCartCount) {
+                cart.updateCartCount();
+            }
+            await loadOrders();
+        });
+
+        // Pipeline stage mapping
+        const TIMELINE_STEPS = [
+            { key: 'placed', label: 'Order Placed', icon: 'fa-check' },
+            { key: 'packing', label: 'Packing at Hub', icon: 'fa-box' },
+            { key: 'dispatched', label: 'Dispatched', icon: 'fa-truck' },
+            { key: 'out_for_delivery', label: 'Out for Delivery', icon: 'fa-motorcycle' },
+            { key: 'completed', label: 'Delivered', icon: 'fa-circle-check' }
+        ];
+
+        function getStageIndex(status) {
+            const s = (status || '').toLowerCase();
+            if (s.includes('deliver') || s === 'completed') return 4;
+            if (s.includes('out') || s.includes('transit')) return 3;
+            if (s.includes('dispatch') || s === 'ready') return 2;
+            if (s.includes('pack') || s === 'processing') return 1;
+            return 0; // Placed / New
+        }
+
+        async function loadOrders() {
+            let orders = JSON.parse(localStorage.getItem('orders')) || [];
+            
+            // Try fetching from backend if user is logged in
+            const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+            if (user && user.id) {
+                try {
+                    const res = await fetch(`/api/orders/user/${user.id}`);
+                    const data = await res.json();
+                    if (data.success && data.data && data.data.length > 0) {
+                        // Merge backend orders if not already in list
+                        data.data.forEach(bo => {
+                            if (!orders.some(o => o.orderId === `ORD-${bo.id}` || o.orderId == bo.id)) {
+                                orders.push({
+                                    orderId: `ORD-${bo.id}`,
+                                    customerInfo: { address: 'Registered Address', city: 'City' },
+                                    paymentMethod: 'Prepaid / Online',
+                                    orderSummary: { total: parseFloat(bo.total_amount) || 0, items: [] },
+                                    orderDate: bo.created_at,
+                                    status: bo.status
+                                });
+                            }
+                        });
+                    }
+                } catch (e) {}
+            }
+
+            const container = document.getElementById('ordersList');
+            if (!container) return;
+
+            if (orders.length === 0) return; // Keep default empty screen
+
+            container.innerHTML = '';
+            orders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+
+            orders.forEach(order => {
+                const stageIdx = getStageIndex(order.status);
+                const orderTotal = (order.orderSummary && order.orderSummary.total) 
+                    ? Number(order.orderSummary.total).toFixed(2) 
+                    : '0.00';
+                const itemsList = (order.orderSummary && order.orderSummary.items) ? order.orderSummary.items : [];
+                const formattedDate = order.orderDate ? new Date(order.orderDate).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) : 'Today';
+
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition';
+                
+                card.innerHTML = `
+                    <!-- Header -->
+                    <div class="p-6 border-b border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gray-50/50">
+                        <div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs font-extrabold bg-green-100 text-green-800 px-3 py-1 rounded-full uppercase tracking-wider">
+                                    #${order.orderId}
+                                </span>
+                                <span class="text-xs text-gray-500 font-medium">Placed on ${formattedDate}</span>
+                            </div>
+                            <h3 class="font-extrabold text-gray-900 text-lg mt-1">Total: ₹${orderTotal}</h3>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <a href="billing.html?order=${order.orderId}" class="text-xs font-bold text-gray-700 hover:text-green-700 bg-white border border-gray-200 px-4 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5">
+                                <i class="fas fa-file-invoice text-green-600"></i> View Invoice
+                            </a>
+                            <button onclick="reorderItems('${order.orderId}')" class="text-xs font-bold text-white bg-green-600 hover:bg-green-700 px-4 py-2 rounded-xl shadow-sm transition flex items-center gap-1.5">
+                                <i class="fas fa-redo"></i> Reorder
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Live Step-by-Step Delivery Tracker -->
+                    <div class="p-6 md:p-8">
+                        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-6 flex items-center gap-2">
+                            <i class="fas fa-route text-green-600"></i> Live Delivery Progress
+                        </h4>
+
+                        <div class="relative">
+                            <!-- Background Progress Line -->
+                            <div class="absolute top-4 left-4 right-4 h-1 bg-gray-100 -z-0 hidden md:block">
+                                <div class="h-1 bg-green-600 transition-all duration-700" style="width: ${(stageIdx / (TIMELINE_STEPS.length - 1)) * 100}%"></div>
+                            </div>
+
+                            <!-- Steps Grid -->
+                            <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 relative z-10">
+                                ${TIMELINE_STEPS.map((step, idx) => {
+                                    const isDone = idx <= stageIdx;
+                                    const isCurrent = idx === stageIdx;
+                                    return `
+                                        <div class="flex flex-col items-center text-center">
+                                            <div class="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition shadow-sm ${
+                                                isCurrent 
+                                                    ? 'bg-green-600 text-white ring-4 ring-green-100 animate-pulse' 
+                                                    : isDone 
+                                                        ? 'bg-green-600 text-white' 
+                                                        : 'bg-gray-100 text-gray-400 border border-gray-200'
+                                            }">
+                                                <i class="fas ${step.icon}"></i>
+                                            </div>
+                                            <span class="text-xs font-bold mt-2 ${isDone ? 'text-gray-900' : 'text-gray-400'}">${step.label}</span>
+                                            <span class="text-[10px] ${isCurrent ? 'text-green-600 font-bold' : 'text-gray-400'}">
+                                                ${isCurrent ? 'In Progress' : isDone ? 'Completed' : 'Pending'}
+                                            </span>
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        </div>
+
+                        <!-- Ordered Items Preview -->
+                        ${itemsList.length > 0 ? `
+                            <div class="mt-8 pt-6 border-t border-gray-100">
+                                <h5 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Items in this shipment (${itemsList.length})</h5>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                                    ${itemsList.map(item => `
+                                        <div class="flex items-center gap-3 bg-gray-50 p-2.5 rounded-2xl border border-gray-100">
+                                            <img src="${item.image || 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=100'}" class="w-10 h-10 object-cover rounded-xl bg-white flex-shrink-0">
+                                            <div class="min-w-0 flex-1">
+                                                <p class="text-xs font-bold text-gray-800 truncate">${item.name}</p>
+                                                <p class="text-[11px] text-gray-500">${item.quantity} × ₹${item.price}</p>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function reorderItems(orderId) {
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const order = orders.find(o => o.orderId === orderId);
+            if (!order || !order.orderSummary || !order.orderSummary.items) return;
+
+            let currentCart = JSON.parse(localStorage.getItem('cart')) || [];
+            order.orderSummary.items.forEach(item => {
+                const existing = currentCart.find(c => c.id === item.id);
+                if (existing) {
+                    existing.quantity += item.quantity || 1;
+                } else {
+                    currentCart.push(item);
+                }
+            });
+
+            localStorage.setItem('cart', JSON.stringify(currentCart));
+            if (typeof cart !== 'undefined') cart.updateCartCount();
+            alert('All items from this order have been added to your cart!');
+            window.location.href = 'cart.html';
+        }
+    </script>
 </body>
 </html>

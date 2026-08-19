@@ -330,24 +330,36 @@
                         <!-- Items will load here -->
                     </div>
                     
+                    <!-- Coupon & Promo Code Section -->
+                    <div class="mb-6 pb-6 border-b border-gray-100">
+                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-500 mb-2">Have a Promo Code?</label>
+                        <div id="couponSection">
+                            <!-- Injected dynamically by Cart -->
+                        </div>
+                    </div>
+
                     <!-- Price Breakdown -->
                     <div class="space-y-3 mb-6">
                         <div class="flex justify-between">
                             <span class="text-gray-600">Subtotal</span>
                             <span id="subtotal" class="font-semibold">₹0</span>
                         </div>
+                        <div id="discountRow" class="flex justify-between text-green-600 font-bold hidden">
+                            <span>Coupon Savings</span>
+                            <span id="discountAmount">-₹0</span>
+                        </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Delivery Fee</span>
                             <span id="deliveryFee" class="font-semibold">₹40</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-600">Tax (5%)</span>
+                            <span class="text-gray-600">Tax (5% GST)</span>
                             <span id="tax" class="font-semibold">₹0</span>
                         </div>
                         <div class="border-t pt-3">
                             <div class="flex justify-between text-lg font-bold">
-                                <span>Total</span>
-                                <span id="totalAmount">₹0</span>
+                                <span>Total Payable</span>
+                                <span id="totalAmount" class="text-green-700 font-black">₹0</span>
                             </div>
                         </div>
                     </div>

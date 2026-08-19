@@ -14,6 +14,8 @@ app.use(express.static(path.join(__dirname, '../')));
 app.use('/api/products', require('./routes/products'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/ai', require('./routes/ai'));
+app.use('/api/coupons', require('./routes/coupons'));
+app.use('/api/reviews', require('./routes/reviews'));
 
 // AWS Cloud Integration Routes
 app.use('/api/upload', require('./routes/upload')); // AWS S3 Uploads

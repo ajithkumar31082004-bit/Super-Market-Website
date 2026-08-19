@@ -80,6 +80,64 @@ router.post('/', async (req, res) => {
     });
 });
 
+// @route   GET /api/orders
+// @desc    Get all orders (for admin & staff)
+router.get('/', async (req, res) => {
+    try {
+        const [orders] = await db.query(
+            `SELECT o.*, u.name as user_name, u.email as user_email 
+             FROM orders o 
+             LEFT JOIN users u ON o.user_id = u.id 
+             ORDER BY o.created_at DESC`
+        );
+        res.json({ success: true, data: orders });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Failed to fetch orders', error: error.message });
+    }
+});
+
+// @route   GET /api/orders/:id
+// @desc    Get single order details with items
+router.get('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const [orders] = await db.query('SELECT * FROM orders WHERE id = ?', [id]);
+        if (orders.length === 0) {
+            return res.status(404).json({ success: false, message: 'Order not found' });
+        }
+        const [items] = await db.query(
+            `SELECT oi.*, p.name, p.image, p.unit 
+             FROM order_items oi 
+             LEFT JOIN products p ON oi.product_id = p.id 
+             WHERE oi.order_id = ?`,
+            [id]
+        );
+        res.json({ success: true, data: { ...orders[0], items } });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Failed to fetch order details', error: error.message });
+    }
+});
+
+// @route   PATCH /api/orders/:id/status
+// @desc    Update order fulfillment status (pending -> packing -> dispatched -> out_for_delivery -> completed)
+router.patch('/:id/status', async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const validStatuses = ['pending', 'packing', 'dispatched', 'out_for_delivery', 'completed', 'cancelled'];
+    if (!validStatuses.includes(status)) {
+        return res.status(400).json({ success: false, message: `Invalid status. Must be one of: ${validStatuses.join(', ')}` });
+    }
+
+    try {
+        await db.query('UPDATE orders SET status = ? WHERE id = ?', [status, id]);
+        res.json({ success: true, message: `Order #${id} status updated to ${status}`, status });
+    } catch (error) {
+        console.error('[Order Status Update Error]:', error);
+        res.status(500).json({ success: false, message: 'Failed to update order status', error: error.message });
+    }
+});
+
 // @route   GET /api/orders/user/:userId
 // @desc    Get user order history from RDS MySQL
 router.get('/user/:userId', async (req, res) => {

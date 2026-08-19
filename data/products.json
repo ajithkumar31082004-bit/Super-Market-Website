@@ -284,7 +284,7 @@
       "rating": 4.5,
       "reviews": 68,
       "description": "Crunchy sweet carrots rich in beta-carotene, ideal for salads, cooking and juices.",
-      "image": "https://images.unsplash.com/photo-1598170845058-32b9d6a5c317?w=400&q=80",
+      "image": "https://images.unsplash.com/photo-1447175008436-054170c2e979?w=400&q=80",
       "tags": ["carrots", "vegetables", "vitaminA", "fresh"],
       "featured": false,
       "popularity": 84
@@ -726,7 +726,7 @@
       "rating": 4.8,
       "reviews": 140,
       "description": "Large whole Goan cashew nuts, slow-roasted with Himalayan pink salt.",
-      "image": "https://images.unsplash.com/photo-1536591375315-1b83681e604d?w=400&q=80",
+      "image": "https://images.unsplash.com/photo-1509358271058-acd22cc93898?w=400&q=80",
       "tags": ["cashews", "kaju", "dry fruits", "snacks"],
       "featured": false,
       "popularity": 92
@@ -828,7 +828,7 @@
       "rating": 4.7,
       "reviews": 145,
       "description": "High-protein unpolished yellow pigeon peas / toor dal, essential for sambar and dal tadka.",
-      "image": "https://images.unsplash.com/photo-1596040033221-a1f4f8a7c8a6?w=400&q=80",
+      "image": "https://images.unsplash.com/photo-1515543237350-b3eea1ec8082?w=400&q=80",
       "tags": ["dal", "toor dal", "pulses", "protein", "grains"],
       "featured": false,
       "popularity": 92
@@ -862,7 +862,7 @@
       "rating": 4.8,
       "reviews": 160,
       "description": "100% farm-raised antibiotic-free boneless chicken breast fillets, cleaned and trimmed.",
-      "image": "https://images.unsplash.com/photo-1604503468508-5e5e7d5b5b1a?w=400&q=80",
+      "image": "https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=400&q=80",
       "tags": ["chicken", "meat", "protein", "fresh meat"],
       "featured": true,
       "popularity": 95

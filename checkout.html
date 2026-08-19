@@ -336,18 +336,22 @@
                             <span class="text-gray-600">Subtotal</span>
                             <span id="summarySubtotal" class="font-semibold">₹0</span>
                         </div>
+                        <div id="summaryDiscountRow" class="flex justify-between text-green-600 font-bold hidden">
+                            <span>Coupon Savings</span>
+                            <span id="summaryDiscount">-₹0</span>
+                        </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600">Delivery Fee</span>
                             <span id="summaryDelivery" class="font-semibold">₹40</span>
                         </div>
                         <div class="flex justify-between">
-                            <span class="text-gray-600">Tax (5%)</span>
+                            <span class="text-gray-600">Tax (5% GST)</span>
                             <span id="summaryTax" class="font-semibold">₹0</span>
                         </div>
                         <div class="border-t pt-3">
                             <div class="flex justify-between text-lg font-bold">
-                                <span>Total</span>
-                                <span id="summaryTotal" class="text-green-600 font-extrabold text-xl">₹0</span>
+                                <span>Total Payable</span>
+                                <span id="summaryTotal" class="text-green-700 font-black text-xl">₹0</span>
                             </div>
                         </div>
                     </div>
@@ -467,6 +471,16 @@
             
             // Update summary UI
             document.getElementById('summarySubtotal').textContent = `₹${(orderSummary.subtotal || 0).toFixed(2)}`;
+            
+            const discountRow = document.getElementById('summaryDiscountRow');
+            const discountEl = document.getElementById('summaryDiscount');
+            if (orderSummary.discount && orderSummary.discount > 0) {
+                if (discountRow) discountRow.classList.remove('hidden');
+                if (discountEl) discountEl.innerHTML = `-₹${orderSummary.discount.toFixed(2)} ${orderSummary.couponCode ? `<span class="text-[10px] bg-green-100 text-green-800 font-bold px-1.5 py-0.5 rounded ml-1">${orderSummary.couponCode}</span>` : ''}`;
+            } else if (discountRow) {
+                discountRow.classList.add('hidden');
+            }
+
             document.getElementById('summaryDelivery').textContent = (orderSummary.deliveryFee === 0) ? 'FREE' : `₹${(orderSummary.deliveryFee || 0).toFixed(2)}`;
             document.getElementById('summaryTax').textContent = `₹${(orderSummary.tax || 0).toFixed(2)}`;
             document.getElementById('summaryTotal').textContent = `₹${(orderSummary.total || 0).toFixed(2)}`;
