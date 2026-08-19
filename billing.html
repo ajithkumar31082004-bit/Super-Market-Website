@@ -221,15 +221,15 @@
             
             // Update customer info
             document.getElementById('customerInfo').innerHTML = `
-                <p class="font-semibold">${order.customerInfo.firstName} ${order.customerInfo.lastName}</p>
-                <p>${order.customerInfo.email}</p>
-                <p>${order.customerInfo.phone}</p>
+                <p class="font-semibold">${order.customerInfo.firstName || 'Valued'} ${order.customerInfo.lastName || 'Customer'}</p>
+                <p>${order.customerInfo.email || 'N/A'}</p>
+                <p>${order.customerInfo.phone || 'N/A'}</p>
             `;
             
             document.getElementById('deliveryInfo').innerHTML = `
-                <p>${order.customerInfo.address}</p>
-                <p>${order.customerInfo.city}, ${order.customerInfo.state}</p>
-                <p>PIN: ${order.customerInfo.pinCode}</p>
+                <p>${order.customerInfo.address || order.customerInfo.street || 'Store Pickup'}</p>
+                <p>${order.customerInfo.city || 'Chennai'}, ${order.customerInfo.state || 'Tamil Nadu'}</p>
+                <p>PIN: ${order.customerInfo.pinCode || order.customerInfo.pincode || '600001'}</p>
             `;
             
             // Update items

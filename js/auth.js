@@ -67,6 +67,20 @@ class Auth {
             return { success: true, user: this.currentUser };
         }
 
+        // 2.1 Check for default staff login
+        if (email === 'staff@supermarket.com' && password === 'staff123') {
+            this.currentUser = {
+                id: 2,
+                email: email,
+                name: 'Rahul Sharma (Associate)',
+                role: 'staff',
+                staffId: 'STF-204',
+                phone: '9876543210'
+            };
+            localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+            return { success: true, user: this.currentUser };
+        }
+
         // 3. Check regular users stored in localStorage
         const users = JSON.parse(localStorage.getItem('users')) || [];
         const user = users.find(u => u.email === email && u.password === password);

@@ -70,7 +70,7 @@
                         <i class="fas fa-history"></i>
                         <span>Orders</span>
                     </a>
-                    <a href="admin.html" class="text-gray-700 hover:text-green-600 font-medium flex items-center space-x-2">
+                    <a href="admin.html" id="adminNavLink" class="hidden text-gray-700 hover:text-green-600 font-medium flex items-center space-x-2">
                         <i class="fas fa-cog"></i>
                         <span>Admin</span>
                     </a>
@@ -78,9 +78,49 @@
 
                 <!-- Right Side Actions & Mobile Toggle -->
                 <div class="flex items-center space-x-4">
-                    <a href="login.html" class="hidden sm:inline-flex items-center bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition">
-                        <i class="fas fa-sign-in-alt mr-2"></i>Login
-                    </a>
+                    <!-- User Account Dropdown -->
+                    <div class="relative group hidden sm:block">
+                        <button class="flex items-center space-x-2 p-1 focus:outline-none">
+                            <div class="w-9 h-9 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-green-600"></i>
+                            </div>
+                            <span id="navUserName" class="text-sm font-medium text-gray-700 hidden"></span>
+                            <i class="fas fa-chevron-down text-xs text-gray-600"></i>
+                        </button>
+                        <div class="absolute right-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-gray-100 hidden group-hover:block z-50">
+                            <!-- Shown when NOT logged in -->
+                            <div id="dropdownGuest">
+                                <a href="login.html" class="block px-4 py-3 hover:bg-green-50 text-gray-700 rounded-t-xl">
+                                    <i class="fas fa-sign-in-alt mr-2 text-green-600"></i>Login / Sign Up
+                                </a>
+                            </div>
+                            <!-- Shown when logged in -->
+                            <div id="dropdownUser" class="hidden">
+                                <div class="px-4 py-3 border-b border-gray-100">
+                                    <p class="text-xs text-gray-400">Signed in as</p>
+                                    <p id="dropdownUserName" class="text-sm font-semibold text-gray-800 truncate"></p>
+                                </div>
+                                <a href="user-dashboard.html" class="block px-4 py-2.5 hover:bg-green-50 text-gray-700 flex items-center text-sm font-medium">
+                                    <i class="fas fa-user-circle mr-2 text-green-600"></i>My Dashboard
+                                </a>
+                                <a href="order-history.html" class="block px-4 py-2.5 hover:bg-green-50 text-gray-700 flex items-center text-sm font-medium">
+                                    <i class="fas fa-history mr-2 text-green-600"></i>My Orders
+                                </a>
+                                <a id="dropdownStaffLink" href="staff-dashboard.html" class="hidden px-4 py-2.5 hover:bg-blue-50 text-blue-700 flex items-center text-sm font-medium">
+                                    <i class="fas fa-boxes-stacked mr-2 text-blue-600"></i>Staff Operations
+                                </a>
+                                <a id="dropdownAdminLink" href="admin.html" class="hidden px-4 py-2.5 hover:bg-green-50 text-gray-700 flex items-center text-sm font-medium">
+                                    <i class="fas fa-cog mr-2 text-green-600"></i>Admin Panel
+                                </a>
+                                <div class="border-t border-gray-100 my-1"></div>
+                                <button onclick="auth.logout()" class="w-full text-left px-4 py-2.5 hover:bg-red-50 text-red-600 rounded-b-xl flex items-center text-sm font-medium">
+                                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Menu Button -->
                     <button id="mobileMenuBtn" class="md:hidden text-gray-700 hover:text-green-600 text-2xl focus:outline-none p-1">
                         <i class="fas fa-bars"></i>
                     </button>
@@ -101,12 +141,25 @@
                 <a href="order-history.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">
                     <i class="fas fa-history mr-2 text-green-600"></i>Orders
                 </a>
-                <a href="admin.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">
+                <a href="user-dashboard.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">
+                    <i class="fas fa-user-circle mr-2 text-green-600"></i>My Dashboard
+                </a>
+                <a href="staff-dashboard.html" id="mobileStaffLink" class="hidden px-3 py-2 rounded-md text-blue-700 bg-blue-50 font-medium">
+                    <i class="fas fa-boxes-stacked mr-2"></i>Staff Operations
+                </a>
+                <a href="admin.html" id="mobileAdminLink" class="hidden px-3 py-2 rounded-md text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">
                     <i class="fas fa-cog mr-2 text-green-600"></i>Admin Panel
                 </a>
-                <a href="login.html" class="block px-3 py-2 rounded-md text-green-700 bg-green-50 font-semibold">
-                    <i class="fas fa-sign-in-alt mr-2"></i>Login / Sign Up
-                </a>
+                <div id="mobileGuestLinks">
+                    <a href="login.html" class="block px-3 py-2 rounded-md text-green-700 bg-green-50 font-semibold">
+                        <i class="fas fa-sign-in-alt mr-2"></i>Login / Sign Up
+                    </a>
+                </div>
+                <div id="mobileUserLinks" class="hidden">
+                    <button onclick="auth.logout()" class="w-full text-left px-3 py-2 rounded-md text-red-600 hover:bg-red-50 font-semibold">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </button>
+                </div>
             </div>
         </div>
     </header>
@@ -310,10 +363,10 @@
                         </label>
                     </div>
                     
-                    <!-- Complete Order Button -->
-                    <button onclick="completeOrder()" 
-                            class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-green-700">
-                        <i class="fas fa-lock mr-2"></i>Complete Order
+                    <!-- Proceed to Checkout Button -->
+                    <button onclick="proceedToCheckout()" 
+                            class="w-full bg-green-600 text-white py-3.5 rounded-xl font-bold text-lg hover:bg-green-700 shadow-md transition flex items-center justify-center">
+                        <i class="fas fa-shopping-bag mr-2"></i>Proceed to Checkout
                     </button>
                     
                     <!-- Security Note -->
@@ -336,6 +389,7 @@
                 </div>
             </div>
         </div>
+    <script src="js/auth.js"></script>
     <script src="js/products.js"></script>
     <script src="js/cart.js"></script>
     <script src="js/navbar.js"></script>

@@ -87,20 +87,20 @@
                         <i class="fas fa-sign-in-alt mr-2"></i>Login to Account
                     </button>
                     
-                    <div class="text-center my-6">
-                        <div class="border-b"></div>
-                        <span class="bg-white px-4 -mt-3 inline-block text-gray-500">OR</span>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <button type="button" 
-                                class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg">
-                            <i class="fab fa-facebook mr-2"></i>Facebook
-                        </button>
-                        <button type="button" 
-                                class="bg-red-600 hover:bg-red-700 text-white p-3 rounded-lg">
-                            <i class="fab fa-google mr-2"></i>Google
-                        </button>
+                    <!-- Quick Demo Role Logins -->
+                    <div class="mt-6 pt-4 border-t border-gray-100">
+                        <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 text-center">Quick Demo Logins</p>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button type="button" onclick="fillDemoLogin('admin@supermarket.com', 'admin123')" class="px-2 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-semibold rounded-lg transition text-center">
+                                <i class="fas fa-user-shield text-green-600 block mb-0.5"></i> Admin
+                            </button>
+                            <button type="button" onclick="fillDemoLogin('staff@supermarket.com', 'staff123')" class="px-2 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs font-semibold rounded-lg transition text-center border border-blue-200">
+                                <i class="fas fa-id-badge text-blue-600 block mb-0.5"></i> Staff
+                            </button>
+                            <button type="button" onclick="fillDemoLogin('customer@example.com', 'user123')" class="px-2 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-semibold rounded-lg transition text-center border border-emerald-200">
+                                <i class="fas fa-user text-emerald-600 block mb-0.5"></i> Customer
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -232,6 +232,8 @@
                 if (result.success) {
                     if (result.user.role === 'admin') {
                         window.location.href = 'admin.html';
+                    } else if (result.user.role === 'staff') {
+                        window.location.href = 'staff-dashboard.html';
                     } else {
                         window.location.href = 'index.html';
                     }
@@ -281,6 +283,13 @@
                     alert(result.message || 'Registration failed');
                 }
             });
+
+            // Fill demo logins
+            window.fillDemoLogin = function(email, pass) {
+                switchTab('login');
+                document.getElementById('loginEmail').value = email;
+                document.getElementById('loginPassword').value = pass;
+            };
         });
     </script>
 </body>

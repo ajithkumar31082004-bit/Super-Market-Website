@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Operations & Fulfillment Portal - SuperMarket Pro</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="js/auth.js"></script>
+    <script>
+        // Access Guard: Only Staff or Admin
+        (function() {
+            const user = auth.getUser();
+            if (!user || (user.role !== 'staff' && user.role !== 'admin')) {
+                alert('Access restricted to store staff and administrators.');
+                window.location.href = 'login.html';
+            }
+        })();
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 min-h-screen flex flex-col">
+
+    <!-- Top Operations Header -->
+    <header class="bg-gray-900 text-white sticky top-0 z-40 shadow-lg border-b border-gray-800">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                
+                <!-- Left: Branding & Staff ID -->
+                <div class="flex items-center space-x-4 w-full md:w-auto justify-between md:justify-start">
+                    <a href="index.html" class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-green-600 text-white rounded-xl flex items-center justify-center font-black text-xl shadow-md">
+                            <i class="fas fa-boxes-stacked"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <h1 class="text-lg font-black tracking-tight">Super<span class="text-green-500">Market</span> Operations</h1>
+                                <span class="bg-blue-600/30 border border-blue-400/40 text-blue-300 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase">Staff Portal</span>
+                            </div>
+                            <p class="text-xs text-gray-400">Store Terminal • Terminal #04</p>
+                        </div>
+                    </a>
+
+                    <!-- Mobile shift status -->
+                    <span id="staffStatusBadge" class="md:hidden px-2.5 py-1 text-xs font-bold rounded-full bg-emerald-500 text-white">
+                        Active On Duty
+                    </span>
+                </div>
+
+                <!-- Center: Shift Timer & Duty Controls -->
+                <div class="flex items-center space-x-4 bg-gray-800/80 px-4 py-2 rounded-2xl border border-gray-700">
+                    <div class="flex items-center space-x-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                        <div class="text-xs text-gray-400">Shift Elapsed:</div>
+                        <div id="shiftTimerDisplay" class="font-mono text-sm font-black text-emerald-400 tracking-wider">02:14:20</div>
+                    </div>
+                    <div class="h-4 w-[1px] bg-gray-700"></div>
+                    <button id="toggleBreakBtn" class="px-3 py-1 bg-amber-100 text-amber-800 hover:bg-amber-200 text-xs font-bold rounded-lg transition flex items-center shadow-sm">
+                        <i class="fas fa-pause mr-1.5"></i> Take Break
+                    </button>
+                </div>
+
+                <!-- Right: Staff Associate Info & Exit -->
+                <div class="flex items-center space-x-3 w-full md:w-auto justify-end">
+                    <div class="flex items-center space-x-2.5 bg-gray-800 px-3 py-1.5 rounded-xl border border-gray-700">
+                        <div class="w-8 h-8 rounded-lg bg-green-700 text-white flex items-center justify-center font-bold text-xs">
+                            <i class="fas fa-id-badge"></i>
+                        </div>
+                        <div class="text-left">
+                            <p class="text-xs font-bold text-gray-200 staff-name truncate max-w-[120px]">Store Associate</p>
+                            <p class="text-[10px] text-gray-400 staff-id font-mono">STF-204</p>
+                        </div>
+                    </div>
+
+                    <a href="index.html" class="px-3 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-xs font-semibold border border-gray-700 transition" title="Back to Customer Store">
+                        <i class="fas fa-store mr-1"></i> Storefront
+                    </a>
+                    
+                    <button onclick="auth.logout()" class="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold transition shadow-sm" title="Clock Out & Logout">
+                        <i class="fas fa-power-off"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Operations Navigation Tabs -->
+        <div class="bg-gray-800/90 border-t border-gray-800 px-4">
+            <div class="container mx-auto flex space-x-2 overflow-x-auto py-2">
+                <button data-tab="fulfillment" class="staff-tab-btn px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-2 bg-green-600 text-white shadow-md">
+                    <i class="fas fa-box-open"></i>
+                    <span>Order Fulfillment Queue</span>
+                </button>
+                <button data-tab="inventory" class="staff-tab-btn px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-2 text-gray-300 hover:bg-gray-700">
+                    <i class="fas fa-boxes-stacked"></i>
+                    <span>Stock & Inventory Manager</span>
+                </button>
+                <button data-tab="pos" class="staff-tab-btn px-4 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-2 text-gray-300 hover:bg-gray-700">
+                    <i class="fas fa-cash-register"></i>
+                    <span>Counter POS Express Billing</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Operations Area -->
+    <main class="flex-1 container mx-auto px-4 py-6 max-w-7xl">
+
+        <!-- 1. TAB: ORDER FULFILLMENT -->
+        <div id="tab-fulfillment" class="staff-tab-pane space-y-6">
+            
+            <!-- Summary Filter Counters -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <button data-filter="new" class="fulfill-filter-btn text-left p-4 bg-white hover:border-rose-300 rounded-2xl border border-gray-200 shadow-sm transition">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold text-gray-500 uppercase">1. Incoming / New</span>
+                        <span id="countFulfillNew" class="px-2 py-0.5 rounded-full text-xs font-black bg-rose-100 text-rose-700">0</span>
+                    </div>
+                    <p class="text-xs text-gray-400">Needs pick & pack</p>
+                </button>
+
+                <button data-filter="packing" class="fulfill-filter-btn text-left p-4 bg-white hover:border-amber-300 rounded-2xl border border-gray-200 shadow-sm transition">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold text-gray-500 uppercase">2. Packing Now</span>
+                        <span id="countFulfillPacking" class="px-2 py-0.5 rounded-full text-xs font-black bg-amber-100 text-amber-700">0</span>
+                    </div>
+                    <p class="text-xs text-gray-400">In assembly stage</p>
+                </button>
+
+                <button data-filter="ready for dispatch" class="fulfill-filter-btn text-left p-4 bg-white hover:border-blue-300 rounded-2xl border border-gray-200 shadow-sm transition">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold text-gray-500 uppercase">3. Ready for Dispatch</span>
+                        <span id="countFulfillReady" class="px-2 py-0.5 rounded-full text-xs font-black bg-blue-100 text-blue-700">0</span>
+                    </div>
+                    <p class="text-xs text-gray-400">Awaiting rider pickup</p>
+                </button>
+
+                <button data-filter="all" class="fulfill-filter-btn text-left p-4 bg-gray-900 text-white rounded-2xl shadow-sm transition">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-bold text-gray-300 uppercase">View All Orders</span>
+                        <i class="fas fa-layer-group text-green-400"></i>
+                    </div>
+                    <p class="text-xs text-gray-400">Full operations list</p>
+                </button>
+            </div>
+
+            <!-- Orders Pipeline Feed -->
+            <div id="fulfillmentOrdersList" class="space-y-4">
+                <!-- Populated dynamically by staff-dashboard.js -->
+            </div>
+        </div>
+
+        <!-- 2. TAB: INVENTORY STOCK MANAGER -->
+        <div id="tab-inventory" class="staff-tab-pane hidden space-y-6">
+            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+                
+                <!-- Inventory Search & Controls -->
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h3 class="text-xl font-black text-gray-900">Live Inventory & Quick Restock</h3>
+                        <p class="text-xs text-gray-500">Monitor store shelf counts, receive stock, and flag low inventory</p>
+                    </div>
+
+                    <div class="flex items-center space-x-3 w-full md:w-auto">
+                        <div class="relative flex-1 md:w-64">
+                            <input type="text" id="inventorySearch" placeholder="Search product or category..." class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <i class="fas fa-search absolute left-3 top-3 text-gray-400 text-xs"></i>
+                        </div>
+
+                        <label class="flex items-center space-x-2 cursor-pointer bg-gray-50 border border-gray-200 px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap">
+                            <input type="checkbox" id="filterLowStockOnly" class="rounded text-red-600 focus:ring-red-500">
+                            <span>Low Stock Only (&le;10)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Products Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-gray-50 text-gray-500 text-xs font-bold uppercase tracking-wider border-y border-gray-200">
+                                <th class="p-4">Item & SKU</th>
+                                <th class="p-4">Category</th>
+                                <th class="p-4">Price</th>
+                                <th class="p-4">Shelf Stock</th>
+                                <th class="p-4">Quick Adjust</th>
+                                <th class="p-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody">
+                            <!-- Populated dynamically by staff-dashboard.js -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. TAB: COUNTER POS EXPRESS BILLING -->
+        <div id="tab-pos" class="staff-tab-pane hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Left 2 Cols: Product Catalog Selection -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between gap-4">
+                        <div class="relative flex-1">
+                            <input type="text" id="posProductSearch" placeholder="Quick search product or tap to add..." class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 text-xs focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <i class="fas fa-barcode absolute left-3 top-3 text-gray-400 text-xs"></i>
+                        </div>
+                        <span class="text-xs font-semibold text-gray-500 whitespace-nowrap">Walk-in POS Terminal</span>
+                    </div>
+
+                    <!-- Products Grid -->
+                    <div id="posProductsGrid" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Right 1 Col: Live POS Billing Panel -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 sticky top-28 flex flex-col justify-between min-h-[500px]">
+                        <div>
+                            <div class="flex items-center justify-between border-b border-gray-100 pb-3 mb-4">
+                                <div>
+                                    <h3 class="font-extrabold text-gray-900 text-sm">Customer Bill</h3>
+                                    <p class="text-[11px] text-gray-400">Order Items (<span id="posItemsCount">0</span>)</p>
+                                </div>
+                                <button onclick="clearPOSCart()" class="text-xs text-red-500 hover:text-red-700 font-semibold">
+                                    <i class="fas fa-trash-alt mr-1"></i> Clear
+                                </button>
+                            </div>
+
+                            <!-- Customer Name Input -->
+                            <div class="mb-3">
+                                <label class="block text-[11px] font-bold text-gray-500 uppercase mb-1">Customer / Token</label>
+                                <input type="text" id="posCustomerName" placeholder="Walk-in Customer #101" class="w-full px-3 py-2 rounded-lg border border-gray-200 text-xs focus:outline-none focus:ring-1 focus:ring-green-500">
+                            </div>
+
+                            <!-- Cart Items List -->
+                            <div id="posCartItemsList" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Summary & Charge -->
+                        <div class="pt-4 border-t border-gray-100 mt-4 space-y-3">
+                            <div class="space-y-1 text-xs">
+                                <div class="flex justify-between text-gray-500">
+                                    <span>Subtotal</span>
+                                    <span id="posSubtotal">₹0.00</span>
+                                </div>
+                                <div class="flex justify-between text-gray-500">
+                                    <span>GST (5%)</span>
+                                    <span>Included</span>
+                                </div>
+                                <div class="flex justify-between font-extrabold text-gray-900 text-base pt-2 border-t">
+                                    <span>Total Payable</span>
+                                    <span id="posGrandTotal" class="text-green-600 font-black">₹0.00</span>
+                                </div>
+                            </div>
+
+                            <!-- Payment Method Selector -->
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-500 uppercase mb-1.5">Payment Method</label>
+                                <div class="grid grid-cols-3 gap-2">
+                                    <label class="flex items-center justify-center p-2 border rounded-lg cursor-pointer hover:bg-green-50 text-xs font-bold text-gray-700">
+                                        <input type="radio" name="posPaymentMethod" value="Cash" checked class="mr-1 text-green-600">
+                                        Cash
+                                    </label>
+                                    <label class="flex items-center justify-center p-2 border rounded-lg cursor-pointer hover:bg-green-50 text-xs font-bold text-gray-700">
+                                        <input type="radio" name="posPaymentMethod" value="UPI" class="mr-1 text-green-600">
+                                        UPI
+                                    </label>
+                                    <label class="flex items-center justify-center p-2 border rounded-lg cursor-pointer hover:bg-green-50 text-xs font-bold text-gray-700">
+                                        <input type="radio" name="posPaymentMethod" value="Card" class="mr-1 text-green-600">
+                                        Card
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button id="posCompleteBillBtn" class="w-full py-3.5 bg-green-600 hover:bg-green-700 text-white font-extrabold text-sm rounded-xl shadow-lg transition flex items-center justify-center space-x-2">
+                                <i class="fas fa-check-circle text-base"></i>
+                                <span>Complete Sale & Print Bill</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/products.js"></script>
+    <script src="js/staff-dashboard.js"></script>
+</body>
+</html>

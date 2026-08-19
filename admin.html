@@ -6,6 +6,17 @@
     <title>Admin Dashboard - SuperMarket Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Restrict access: Only Admin role can access admin.html
+        (function() {
+            const user = auth.getUser();
+            if (!user || user.role !== 'admin') {
+                alert('Access restricted. Please login with an administrator account.');
+                window.location.href = 'login.html';
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .sidebar {

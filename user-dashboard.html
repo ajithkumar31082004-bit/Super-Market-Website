@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account & Dashboard - SuperMarket Pro</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .dash-card {
+            transition: all 0.2s ease-in-out;
+        }
+        .dash-card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+
+    <!-- Top Header & Navigation -->
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center text-white shadow-md shadow-green-100">
+                        <i class="fas fa-shopping-basket text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-black tracking-tight text-gray-900">Super<span class="text-green-600">Market</span>Pro</h1>
+                        <p class="text-xs text-gray-500 hidden sm:block">Fresh Groceries Delivered</p>
+                    </div>
+                </a>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-green-600 font-medium flex items-center space-x-2">
+                        <i class="fas fa-home"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="shop.html" class="text-gray-700 hover:text-green-600 font-medium flex items-center space-x-2">
+                        <i class="fas fa-store"></i>
+                        <span>Shop</span>
+                    </a>
+                    <a href="cart.html" class="text-gray-700 hover:text-green-600 font-medium flex items-center space-x-2">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Cart</span>
+                    </a>
+                    <a href="order-history.html" class="text-gray-700 hover:text-green-600 font-medium flex items-center space-x-2">
+                        <i class="fas fa-history"></i>
+                        <span>Orders</span>
+                    </a>
+                    <a href="admin.html" id="adminNavLink" class="hidden text-gray-700 hover:text-green-600 font-medium flex items-center space-x-2">
+                        <i class="fas fa-cog"></i>
+                        <span>Admin</span>
+                    </a>
+                </nav>
+
+                <!-- Right Side Actions -->
+                <div class="flex items-center space-x-4">
+                    <!-- Cart Link -->
+                    <a href="cart.html" class="relative p-2 text-gray-700 hover:text-green-600 transition">
+                        <i class="fas fa-shopping-cart text-2xl"></i>
+                        <span id="cartCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                    </a>
+
+                    <!-- User Account Dropdown -->
+                    <div class="relative group hidden sm:block">
+                        <button class="flex items-center space-x-2 p-1.5 rounded-full hover:bg-gray-100 transition focus:outline-none">
+                            <div class="w-9 h-9 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-sm user-avatar-initials">
+                                U
+                            </div>
+                            <span id="navUserName" class="text-sm font-semibold text-gray-800">Account</span>
+                            <i class="fas fa-chevron-down text-xs text-gray-500"></i>
+                        </button>
+                        <div class="absolute right-0 mt-1 w-60 bg-white rounded-2xl shadow-xl border border-gray-100 hidden group-hover:block z-50 overflow-hidden">
+                            <div id="dropdownUser">
+                                <div class="px-4 py-3 bg-gradient-to-r from-green-50 to-emerald-50 border-b border-gray-100">
+                                    <p class="text-xs text-gray-500 font-medium">Signed in as</p>
+                                    <p id="dropdownUserName" class="text-sm font-bold text-gray-900 truncate user-display-name"></p>
+                                </div>
+                                <a href="user-dashboard.html" class="block px-4 py-3 text-green-700 font-bold bg-green-50/50 hover:bg-green-100/50 flex items-center transition">
+                                    <i class="fas fa-user-circle mr-2.5 text-green-600 text-base"></i> My Dashboard
+                                </a>
+                                <a href="order-history.html" class="block px-4 py-2.5 hover:bg-gray-50 text-gray-700 flex items-center text-sm transition">
+                                    <i class="fas fa-box-open mr-2.5 text-gray-500"></i> My Orders
+                                </a>
+                                <a id="dropdownStaffLink" href="staff-dashboard.html" class="hidden px-4 py-2.5 hover:bg-blue-50 text-blue-700 flex items-center text-sm font-medium transition">
+                                    <i class="fas fa-boxes-stacked mr-2.5 text-blue-600"></i> Staff Operations
+                                </a>
+                                <a id="dropdownAdminLink" href="admin.html" class="hidden px-4 py-2.5 hover:bg-green-50 text-gray-700 flex items-center text-sm transition">
+                                    <i class="fas fa-cog mr-2.5 text-green-600"></i> Admin Panel
+                                </a>
+                                <div class="border-t border-gray-100 my-1"></div>
+                                <button onclick="auth.logout()" class="w-full text-left px-4 py-2.5 hover:bg-red-50 text-red-600 font-medium flex items-center text-sm transition">
+                                    <i class="fas fa-sign-out-alt mr-2.5"></i> Logout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobileMenuBtn" class="md:hidden text-gray-700 hover:text-green-600 text-2xl focus:outline-none p-1">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation Drawer -->
+            <div id="mobileNavMenu" class="hidden md:hidden pt-4 pb-2 border-t border-gray-100 mt-3 space-y-2">
+                <a href="index.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">
+                    <i class="fas fa-home mr-2 text-green-600"></i>Home
+                </a>
+                <a href="shop.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">
+                    <i class="fas fa-store mr-2 text-green-600"></i>Shop
+                </a>
+                <a href="cart.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">
+                    <i class="fas fa-shopping-cart mr-2 text-green-600"></i>Cart
+                </a>
+                <a href="order-history.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">
+                    <i class="fas fa-history mr-2 text-green-600"></i>Orders
+                </a>
+                <a href="user-dashboard.html" class="block px-3 py-2 rounded-md text-green-700 bg-green-50 font-bold">
+                    <i class="fas fa-user-circle mr-2"></i>My Dashboard
+                </a>
+                <a href="staff-dashboard.html" id="mobileStaffLink" class="hidden px-3 py-2 rounded-md text-blue-700 bg-blue-50 font-medium">
+                    <i class="fas fa-boxes-stacked mr-2"></i>Staff Operations
+                </a>
+                <a href="admin.html" id="mobileAdminLink" class="hidden px-3 py-2 rounded-md text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">
+                    <i class="fas fa-cog mr-2 text-green-600"></i>Admin Panel
+                </a>
+                <div id="mobileUserLinks">
+                    <button onclick="auth.logout()" class="w-full text-left px-3 py-2 rounded-md text-red-600 hover:bg-red-50 font-semibold">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 container mx-auto px-4 py-8 max-w-7xl">
+
+        <!-- Top Profile Welcome Hero Banner -->
+        <div class="relative bg-gradient-to-r from-emerald-700 via-green-600 to-teal-700 rounded-3xl p-6 sm:p-8 text-white shadow-xl mb-8 overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
+                <i class="fas fa-leaf text-[220px]"></i>
+            </div>
+            
+            <div class="relative z-10 flex flex-col md:flex-row items-center md:items-start justify-between gap-6">
+                <div class="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-5 text-center sm:text-left">
+                    <!-- Avatar circle -->
+                    <div class="w-20 h-20 sm:w-24 sm:h-24 bg-white/20 backdrop-blur-md rounded-2xl border-2 border-white/40 flex items-center justify-center text-white text-3xl font-black shadow-inner user-avatar-initials">
+                        U
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-center sm:justify-start space-x-2">
+                            <h2 class="text-2xl sm:text-3xl font-extrabold user-display-name">Customer</h2>
+                            <span class="bg-amber-400 text-amber-950 font-black text-xs px-2.5 py-1 rounded-full uppercase tracking-wider flex items-center shadow-sm">
+                                <i class="fas fa-crown mr-1"></i> Gold Member
+                            </span>
+                        </div>
+                        <p class="text-emerald-100 text-sm mt-1 user-display-email">customer@example.com</p>
+                        <p class="text-emerald-200 text-xs mt-2 flex items-center justify-center sm:justify-start">
+                            <i class="fas fa-calendar-check mr-1.5 opacity-80"></i> SuperMarket Pro Club Member since 2026
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Quick Wallet & Points Highlights -->
+                <div class="flex items-center space-x-4 bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl shadow-inner">
+                    <div class="text-center px-3 border-r border-white/20">
+                        <p class="text-xs text-emerald-100 font-medium">SuperPoints</p>
+                        <p id="superPointsTotal" class="text-xl font-black text-white mt-0.5">450 pts</p>
+                    </div>
+                    <div class="text-center px-3">
+                        <p class="text-xs text-emerald-100 font-medium">Wallet Balance</p>
+                        <p id="superWalletBalance" class="text-xl font-black text-amber-300 mt-0.5">₹45.00</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Layout: Sidebar + Main Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            <!-- Left Sidebar Navigation -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sticky top-24">
+                    <div class="px-3 py-2 text-xs font-bold uppercase tracking-wider text-gray-400">Account Navigation</div>
+                    <nav class="space-y-1.5 mt-2">
+                        <button data-tab="overview" class="dash-nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm transition text-left bg-green-600 text-white shadow-md">
+                            <i class="fas fa-th-large w-5 text-center"></i>
+                            <span>Overview</span>
+                        </button>
+                        <button data-tab="profile" class="dash-nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm transition text-left text-gray-700 hover:bg-green-50">
+                            <i class="fas fa-user w-5 text-center"></i>
+                            <span>My Profile</span>
+                        </button>
+                        <button data-tab="addresses" class="dash-nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm transition text-left text-gray-700 hover:bg-green-50">
+                            <i class="fas fa-map-marked-alt w-5 text-center"></i>
+                            <span>Delivery Addresses</span>
+                        </button>
+                        <button data-tab="loyalty" class="dash-nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm transition text-left text-gray-700 hover:bg-green-50">
+                            <i class="fas fa-coins w-5 text-center"></i>
+                            <span>SuperWallet & Rewards</span>
+                        </button>
+                        <button data-tab="wishlist" class="dash-nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm transition text-left text-gray-700 hover:bg-green-50">
+                            <i class="fas fa-heart w-5 text-center"></i>
+                            <span>My Wishlist</span>
+                        </button>
+                        <button data-tab="security" class="dash-nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl font-semibold text-sm transition text-left text-gray-700 hover:bg-green-50">
+                            <i class="fas fa-shield-alt w-5 text-center"></i>
+                            <span>Security & Password</span>
+                        </button>
+                    </nav>
+
+                    <div class="border-t border-gray-100 my-4"></div>
+
+                    <!-- Direct Shortcuts -->
+                    <div class="space-y-1">
+                        <a href="order-history.html" class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-green-600 transition">
+                            <span class="flex items-center"><i class="fas fa-history w-5 text-center mr-2 text-gray-400"></i> Full Order History</span>
+                            <i class="fas fa-chevron-right text-xs"></i>
+                        </a>
+                        <a href="shop.html" class="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-green-600 transition">
+                            <span class="flex items-center"><i class="fas fa-shopping-basket w-5 text-center mr-2 text-gray-400"></i> Continue Shopping</span>
+                            <i class="fas fa-chevron-right text-xs"></i>
+                        </a>
+                        <button onclick="auth.logout()" class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl text-sm font-semibold text-red-600 hover:bg-red-50 transition text-left mt-2">
+                            <i class="fas fa-sign-out-alt w-5 text-center"></i>
+                            <span>Log Out</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Tab Panes Area -->
+            <div class="lg:col-span-3">
+
+                <!-- 1. TAB: OVERVIEW -->
+                <div id="tab-overview" class="dash-tab-pane space-y-8">
+                    <!-- Quick Summary Metrics -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div class="dash-card bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-xl bg-green-50 text-green-600 flex items-center justify-center text-xl font-bold">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-medium">Total Orders</p>
+                                <h3 id="statTotalOrders" class="text-xl font-extrabold text-gray-900 mt-0.5">0</h3>
+                            </div>
+                        </div>
+
+                        <div class="dash-card bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-medium">Reward Pts</p>
+                                <h3 class="text-xl font-extrabold text-gray-900 mt-0.5">450</h3>
+                            </div>
+                        </div>
+
+                        <div class="dash-card bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl font-bold">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-medium">Wishlist Items</p>
+                                <h3 id="statWishlistCount" class="text-xl font-extrabold text-gray-900 mt-0.5">2</h3>
+                            </div>
+                        </div>
+
+                        <div class="dash-card bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center space-x-4">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold">
+                                <i class="fas fa-truck-fast"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-medium">Active Transit</p>
+                                <h3 class="text-xl font-extrabold text-gray-900 mt-0.5">1</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Orders Section -->
+                    <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+                        <div class="flex items-center justify-between mb-5">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-900">Recent Orders</h3>
+                                <p class="text-xs text-gray-500">Track and view invoices for your latest grocery deliveries</p>
+                            </div>
+                            <a href="order-history.html" class="text-sm font-semibold text-green-600 hover:text-green-700 flex items-center">
+                                View All <i class="fas fa-arrow-right ml-1.5 text-xs"></i>
+                            </a>
+                        </div>
+                        <div id="overviewRecentOrders" class="space-y-3">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Personalized Fresh Recommendations -->
+                    <div class="bg-gradient-to-br from-green-50 via-emerald-50/40 to-teal-50 rounded-2xl border border-green-100 p-6 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-8 h-8 rounded-lg bg-green-600 text-white flex items-center justify-center text-sm shadow-sm">
+                                    <i class="fas fa-sparkles"></i>
+                                </span>
+                                <div>
+                                    <h3 class="font-bold text-gray-900">Recommended for Your Kitchen</h3>
+                                    <p class="text-xs text-gray-500">Curated organic picks based on your dietary favorites</p>
+                                </div>
+                            </div>
+                            <a href="shop.html" class="text-xs font-bold text-green-700 hover:underline">Explore More</a>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-2">
+                            <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center space-x-3">
+                                <img src="https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=120" alt="Apples" class="w-14 h-14 rounded-lg object-cover">
+                                <div>
+                                    <h4 class="font-bold text-sm text-gray-900">Himachal Apples</h4>
+                                    <p class="text-xs text-green-600 font-extrabold">₹120/kg</p>
+                                    <a href="shop.html" class="text-[11px] font-semibold text-gray-500 hover:text-green-600 mt-1 inline-block">+ Add to Cart</a>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center space-x-3">
+                                <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?w=120" alt="Milk" class="w-14 h-14 rounded-lg object-cover">
+                                <div>
+                                    <h4 class="font-bold text-sm text-gray-900">Pure Cow Milk</h4>
+                                    <p class="text-xs text-green-600 font-extrabold">₹60/L</p>
+                                    <a href="shop.html" class="text-[11px] font-semibold text-gray-500 hover:text-green-600 mt-1 inline-block">+ Add to Cart</a>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center space-x-3">
+                                <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=120" alt="Bread" class="w-14 h-14 rounded-lg object-cover">
+                                <div>
+                                    <h4 class="font-bold text-sm text-gray-900">Artisan Brown Bread</h4>
+                                    <p class="text-xs text-green-600 font-extrabold">₹40/pack</p>
+                                    <a href="shop.html" class="text-[11px] font-semibold text-gray-500 hover:text-green-600 mt-1 inline-block">+ Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. TAB: MY PROFILE -->
+                <div id="tab-profile" class="dash-tab-pane hidden space-y-6">
+                    <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
+                        <div class="flex items-center justify-between border-b border-gray-100 pb-5 mb-6">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900">Personal Information</h3>
+                                <p class="text-sm text-gray-500 mt-0.5">Manage your contact details and basic profile</p>
+                            </div>
+                            <span id="profileSaveMsg" class="hidden text-xs bg-green-100 text-green-800 font-semibold px-3 py-1 rounded-full animate-bounce">
+                                <i class="fas fa-check-circle mr-1"></i> Saved successfully!
+                            </span>
+                        </div>
+
+                        <form id="profileEditForm" class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">First Name</label>
+                                    <input type="text" id="profileFirstName" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Last Name</label>
+                                    <input type="text" id="profileLastName" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Email Address</label>
+                                    <input type="email" id="profileEmail" disabled class="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-500 cursor-not-allowed text-sm">
+                                    <p class="text-[11px] text-gray-400 mt-1">Email is associated with your account authentication.</p>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Phone Number</label>
+                                    <input type="tel" id="profilePhone" placeholder="+91 98765 43210" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm">
+                                </div>
+                            </div>
+
+                            <!-- Food Preferences -->
+                            <div class="pt-4 border-t border-gray-100">
+                                <h4 class="text-sm font-bold text-gray-900 mb-3">Dietary & Grocery Preferences</h4>
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                    <label class="flex items-center space-x-2.5 p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-green-50 transition">
+                                        <input type="checkbox" checked class="rounded text-green-600 focus:ring-green-500">
+                                        <span class="text-xs font-semibold text-gray-700">100% Vegetarian</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2.5 p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-green-50 transition">
+                                        <input type="checkbox" checked class="rounded text-green-600 focus:ring-green-500">
+                                        <span class="text-xs font-semibold text-gray-700">Organic First</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2.5 p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-green-50 transition">
+                                        <input type="checkbox" class="rounded text-green-600 focus:ring-green-500">
+                                        <span class="text-xs font-semibold text-gray-700">Gluten-Free</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2.5 p-3 rounded-xl border border-gray-200 cursor-pointer hover:bg-green-50 transition">
+                                        <input type="checkbox" checked class="rounded text-green-600 focus:ring-green-500">
+                                        <span class="text-xs font-semibold text-gray-700">Dairy Lovers</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end pt-4">
+                                <button type="submit" class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-md transition flex items-center space-x-2">
+                                    <i class="fas fa-save"></i>
+                                    <span>Save Profile Changes</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 3. TAB: SAVED ADDRESSES -->
+                <div id="tab-addresses" class="dash-tab-pane hidden space-y-6">
+                    <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-100 pb-5 mb-6">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900">Delivery Addresses</h3>
+                                <p class="text-sm text-gray-500 mt-0.5">Manage your home, work, and secondary delivery locations</p>
+                            </div>
+                            <button id="openAddAddressBtn" class="px-4 py-2.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl text-sm shadow-md transition flex items-center space-x-2 self-start sm:self-auto">
+                                <i class="fas fa-plus"></i>
+                                <span>Add New Address</span>
+                            </button>
+                        </div>
+
+                        <!-- Address Cards Grid -->
+                        <div id="addressesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. TAB: LOYALTY & SUPERWALLET -->
+                <div id="tab-loyalty" class="dash-tab-pane hidden space-y-6">
+                    <!-- Points & Tier Card -->
+                    <div class="bg-gradient-to-br from-amber-500 via-orange-500 to-amber-600 text-white rounded-3xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+                        <div class="absolute -right-8 -bottom-8 opacity-20 pointer-events-none">
+                            <i class="fas fa-trophy text-[180px]"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <div class="flex items-center justify-between">
+                                <span class="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold tracking-wider uppercase">
+                                    <i class="fas fa-crown mr-1 text-yellow-200"></i> Tier: Gold Club
+                                </span>
+                                <span class="text-xs font-semibold text-amber-100">10 Pts = ₹1.00</span>
+                            </div>
+
+                            <div class="mt-6 mb-6">
+                                <p class="text-amber-100 text-xs font-medium uppercase tracking-wider">Available SuperPoints</p>
+                                <h2 class="text-4xl sm:text-5xl font-black mt-1">450 <span class="text-xl font-bold text-amber-200">Points</span></h2>
+                                <p class="text-sm font-semibold text-amber-100 mt-1">Equivalent to ₹45.00 Instant Checkout Credit</p>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between text-xs font-bold text-amber-100 mb-1.5">
+                                    <span>Gold Tier (450 pts)</span>
+                                    <span>Platinum Tier (1,000 pts)</span>
+                                </div>
+                                <div class="w-full bg-black/20 h-2.5 rounded-full overflow-hidden">
+                                    <div id="loyaltyProgressBar" class="bg-white h-full rounded-full transition-all duration-500" style="width: 45%;"></div>
+                                </div>
+                                <p class="text-xs text-amber-100 mt-2">Earn 550 more points with your grocery purchases to unlock Platinum 5% cashbacks!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Available Vouchers to Redeem -->
+                    <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">Redeem SuperPoints for Coupons</h3>
+                        <p class="text-xs text-gray-500 mb-5">Convert your points into immediate discounts applied at checkout</p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Coupon 1 -->
+                            <div class="border border-green-200 bg-green-50/50 rounded-2xl p-5 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-start">
+                                        <span class="text-xs bg-green-600 text-white font-bold px-2 py-0.5 rounded">₹50 OFF</span>
+                                        <span class="text-xs font-bold text-green-700">Cost: 200 pts</span>
+                                    </div>
+                                    <h4 class="font-bold text-gray-900 mt-3">₹50 Off Grocery Voucher</h4>
+                                    <p class="text-xs text-gray-600 mt-1">Valid on any order above ₹499 across all vegetables & fruits.</p>
+                                </div>
+                                <button onclick="redeemCoupon(200, 'SUPER50', 50)" class="mt-4 w-full py-2.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold rounded-xl transition shadow-sm">
+                                    Redeem for 200 Points
+                                </button>
+                            </div>
+
+                            <!-- Coupon 2 -->
+                            <div class="border border-purple-200 bg-purple-50/50 rounded-2xl p-5 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex justify-between items-start">
+                                        <span class="text-xs bg-purple-600 text-white font-bold px-2 py-0.5 rounded">₹100 OFF</span>
+                                        <span class="text-xs font-bold text-purple-700">Cost: 400 pts</span>
+                                    </div>
+                                    <h4 class="font-bold text-gray-900 mt-3">₹100 Off Mega Saver</h4>
+                                    <p class="text-xs text-gray-600 mt-1">Valid on entire store order above ₹999 with free express delivery.</p>
+                                </div>
+                                <button onclick="redeemCoupon(400, 'SUPER100', 100)" class="mt-4 w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold rounded-xl transition shadow-sm">
+                                    Redeem for 400 Points
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. TAB: WISHLIST -->
+                <div id="tab-wishlist" class="dash-tab-pane hidden space-y-6">
+                    <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
+                        <div class="flex items-center justify-between border-b border-gray-100 pb-5 mb-6">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900">My Saved Wishlist</h3>
+                                <p class="text-sm text-gray-500 mt-0.5">Quickly reorder your everyday grocery favorites</p>
+                            </div>
+                            <a href="shop.html" class="text-xs font-bold text-green-600 hover:underline flex items-center">
+                                <i class="fas fa-plus mr-1"></i> Add More Items
+                            </a>
+                        </div>
+
+                        <!-- Wishlist Items Grid -->
+                        <div id="wishlistItemsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. TAB: SECURITY & PASSWORD -->
+                <div id="tab-security" class="dash-tab-pane hidden space-y-6">
+                    <div class="bg-white rounded-2xl border border-gray-100 p-6 sm:p-8 shadow-sm">
+                        <div class="flex items-center justify-between border-b border-gray-100 pb-5 mb-6">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900">Account Security</h3>
+                                <p class="text-sm text-gray-500 mt-0.5">Update password and notification settings</p>
+                            </div>
+                            <span id="securitySaveMsg" class="hidden text-xs bg-green-100 text-green-800 font-semibold px-3 py-1 rounded-full animate-bounce">
+                                <i class="fas fa-check-circle mr-1"></i> Password updated!
+                            </span>
+                        </div>
+
+                        <form id="securityForm" class="space-y-5 max-w-lg">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Current Password</label>
+                                <input type="password" id="currPassword" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">New Password</label>
+                                <input type="password" id="newPassword" required minlength="6" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm">
+                                <p class="text-[11px] text-gray-400 mt-1">Must be at least 6 characters.</p>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Confirm New Password</label>
+                                <input type="password" id="confirmNewPassword" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm">
+                            </div>
+
+                            <div class="pt-3">
+                                <button type="submit" class="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-md transition text-sm">
+                                    Update Password
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: Add Address -->
+    <div id="addAddressModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl animate-fade-in max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-gray-100 pb-4 mb-5">
+                <h3 class="text-lg font-bold text-gray-900">Add New Delivery Address</h3>
+                <button id="closeAddAddressBtn" class="text-gray-400 hover:text-gray-600 text-xl font-bold">&times;</button>
+            </div>
+
+            <form id="addAddressForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Address Label</label>
+                    <select id="addrType" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                        <option value="Home">Home</option>
+                        <option value="Work">Work / Office</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Contact Person Name</label>
+                    <input type="text" id="addrName" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Street / House / Building</label>
+                    <textarea id="addrStreet" required rows="2" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">City</label>
+                        <input type="text" id="addrCity" required value="Chennai" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">PIN Code</label>
+                        <input type="text" id="addrPincode" required placeholder="600001" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">State</label>
+                        <input type="text" id="addrState" required value="Tamil Nadu" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Phone</label>
+                        <input type="tel" id="addrPhone" required placeholder="9876543210" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" id="addrDefault" class="rounded text-green-600 focus:ring-green-500">
+                        <span class="text-xs font-semibold text-gray-700">Set as my default delivery address</span>
+                    </label>
+                </div>
+
+                <div class="pt-4 flex justify-end space-x-3">
+                    <button type="button" onclick="document.getElementById('addAddressModal').classList.add('hidden')" class="px-4 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl text-sm shadow-md transition">
+                        Save Address
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/user-dashboard.js"></script>
+</body>
+</html>

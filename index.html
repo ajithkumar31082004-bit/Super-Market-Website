@@ -102,10 +102,20 @@
                                     <p class="text-xs text-gray-400">Signed in as</p>
                                     <p id="dropdownUserName" class="text-sm font-semibold text-gray-800 truncate"></p>
                                 </div>
-                                <a id="dropdownAdminLink" href="admin.html" class="hidden px-4 py-3 hover:bg-green-50 text-gray-700 flex items-center">
+                                <a href="user-dashboard.html" class="block px-4 py-2.5 hover:bg-green-50 text-gray-700 flex items-center text-sm font-medium">
+                                    <i class="fas fa-user-circle mr-2 text-green-600"></i>My Dashboard
+                                </a>
+                                <a href="order-history.html" class="block px-4 py-2.5 hover:bg-green-50 text-gray-700 flex items-center text-sm font-medium">
+                                    <i class="fas fa-history mr-2 text-green-600"></i>My Orders
+                                </a>
+                                <a id="dropdownStaffLink" href="staff-dashboard.html" class="hidden px-4 py-2.5 hover:bg-blue-50 text-blue-700 flex items-center text-sm font-medium">
+                                    <i class="fas fa-boxes-stacked mr-2 text-blue-600"></i>Staff Operations
+                                </a>
+                                <a id="dropdownAdminLink" href="admin.html" class="hidden px-4 py-2.5 hover:bg-green-50 text-gray-700 flex items-center text-sm font-medium">
                                     <i class="fas fa-cog mr-2 text-green-600"></i>Admin Panel
                                 </a>
-                                <button onclick="auth.logout()" class="w-full text-left px-4 py-3 hover:bg-red-50 text-red-600 rounded-b-xl flex items-center">
+                                <div class="border-t border-gray-100 my-1"></div>
+                                <button onclick="auth.logout()" class="w-full text-left px-4 py-2.5 hover:bg-red-50 text-red-600 rounded-b-xl flex items-center text-sm font-medium">
                                     <i class="fas fa-sign-out-alt mr-2"></i>Logout
                                 </button>
                             </div>
@@ -132,6 +142,12 @@
                 </a>
                 <a href="order-history.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">
                     <i class="fas fa-history mr-2 text-green-600"></i>Orders
+                </a>
+                <a href="user-dashboard.html" class="block px-3 py-2 rounded-md text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">
+                    <i class="fas fa-user-circle mr-2 text-green-600"></i>My Dashboard
+                </a>
+                <a href="staff-dashboard.html" id="mobileStaffLink" class="hidden px-3 py-2 rounded-md text-blue-700 bg-blue-50 font-medium">
+                    <i class="fas fa-boxes-stacked mr-2"></i>Staff Operations
                 </a>
                 <a href="admin.html" id="mobileAdminLink" class="hidden px-3 py-2 rounded-md text-gray-700 hover:bg-green-50 hover:text-green-600 font-medium">
                     <i class="fas fa-cog mr-2 text-green-600"></i>Admin Panel
@@ -829,47 +845,6 @@
 
 <!-- Auth & Navbar Role-Based Visibility -->
 <script src="js/auth.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const user = auth.getUser();
-
-        // Elements
-        const adminNavLink     = document.getElementById('adminNavLink');
-        const mobileAdminLink  = document.getElementById('mobileAdminLink');
-        const dropdownGuest    = document.getElementById('dropdownGuest');
-        const dropdownUser     = document.getElementById('dropdownUser');
-        const dropdownUserName = document.getElementById('dropdownUserName');
-        const dropdownAdminLink= document.getElementById('dropdownAdminLink');
-        const navUserName      = document.getElementById('navUserName');
-        const mobileGuestLinks = document.getElementById('mobileGuestLinks');
-        const mobileUserLinks  = document.getElementById('mobileUserLinks');
-
-        if (user) {
-            // --- Logged In State ---
-            // Show user name in navbar
-            if (navUserName) {
-                navUserName.textContent = user.name || user.email;
-                navUserName.classList.remove('hidden');
-            }
-
-            // Switch dropdown from guest to user
-            if (dropdownGuest) dropdownGuest.classList.add('hidden');
-            if (dropdownUser)  dropdownUser.classList.remove('hidden');
-            if (dropdownUserName) dropdownUserName.textContent = user.name || user.email;
-
-            // Switch mobile menu
-            if (mobileGuestLinks) mobileGuestLinks.classList.add('hidden');
-            if (mobileUserLinks)  mobileUserLinks.classList.remove('hidden');
-
-            // Show Admin links ONLY for admin role
-            if (user.role === 'admin') {
-                if (adminNavLink)    adminNavLink.classList.remove('hidden');
-                if (mobileAdminLink) mobileAdminLink.classList.remove('hidden');
-                if (dropdownAdminLink) dropdownAdminLink.classList.remove('hidden');
-            }
-        }
-        // If no user logged in: admin links stay hidden, guest dropdown stays visible
-    });
-</script>
+<script src="js/navbar.js"></script>
 </body>
 </html>
