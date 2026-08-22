@@ -14,3 +14,9 @@ backend/.env
 Dockerfile
 .dockerignore
 k8s/
+supermarket-eks/
+.terraform/
+*.tfstate*
+*.pem
+*.zip
+

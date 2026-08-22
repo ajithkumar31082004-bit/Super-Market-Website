@@ -1,138 +1,238 @@
-# 🛒 Cloud-Native E-Commerce Platform & Automated CI/CD Pipeline
+# 🛒 SuperMarket Pro — Cloud-Native E-Commerce Platform
 
 ![AWS](https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)
+![Amazon EKS](https://img.shields.io/badge/Amazon_EKS-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![Amazon ECS](https://img.shields.io/badge/Amazon_ECS_Fargate-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)
-![AWS CodePipeline](https://img.shields.io/badge/AWS_CodePipeline-FF9900?style=for-the-badge&logo=amazon-aws&logoColor=white)
+![Terraform](https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=terraform&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL_RDS-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 ![DynamoDB](https://img.shields.io/badge/Amazon_DynamoDB-4053D6?style=for-the-badge&logo=amazonaws&logoColor=white)
+![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white)
+![Google Gemini](https://img.shields.io/badge/Google_Gemini_AI-8E75B2?style=for-the-badge&logo=google&logoColor=white)
 
-A full-stack e-commerce web application powered by **Node.js, Express, AWS Cloud Services (RDS MySQL, DynamoDB, S3, SNS, Lambda)** and deployed via an automated continuous integration and continuous deployment (**CI/CD**) pipeline using **AWS CodePipeline, AWS CodeBuild, Amazon ECR, and Amazon ECS (Fargate)**.
+**SuperMarket Pro** is a cloud-native, full-stack enterprise e-commerce platform designed with microservice principles, multi-tier cloud persistence, AI assistance, containerization, and fully automated multi-target CI/CD pipelines (AWS CodePipeline & Jenkins).
 
 ---
 
-## 🏗️ DevOps Architecture & CI/CD Pipeline Flow
+## 🏛️ System Architecture
 
 ```text
-  [ Developer Push ]
-          │
-          ▼
-    ┌──────────┐
-    │  GitHub  │ (Source Code Repository)
-    └────┬─────┘
-         │ Webhook Trigger
-         ▼
-┌──────────────────┐
-│ AWS CodePipeline │ (CI/CD Orchestrator)
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│  AWS CodeBuild   │ ──(buildspec.yml)──► Builds & Tags Docker Container
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│    Amazon ECR    │ (Stores Container Images)
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│ Amazon ECS       │ (Deploys container to serverless Fargate tasks behind ALB)
-│ (Fargate Task)   │
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│ 🌐 Live Website  │ (Accessible via Application Load Balancer / Domain)
-└──────────────────┘
+                                  ┌──────────────────────────────┐
+                                  │      Client Web Browser      │
+                                  └──────────────┬───────────────┘
+                                                 │
+                                                 ▼
+                                  ┌──────────────────────────────┐
+                                  │   AWS ALB / Ingress Router   │
+                                  └──────────────┬───────────────┘
+                                                 │
+                                                 ▼
+                    ┌─────────────────────────────────────────────────────────┐
+                    │               Amazon EKS Kubernetes Pods                │
+                    │      (Node.js 20 Express App + Static Web Assets)       │
+                    └──────┬──────────┬──────────┬──────────┬──────────┬──────┘
+                           │          │          │          │          │
+         ┌─────────────────┘          │          │          │          └─────────────────┐
+         ▼                            ▼          ▼          ▼                            ▼
+┌─────────────────┐           ┌───────────┐ ┌─────────┐ ┌────────┐              ┌─────────────────┐
+│ Amazon RDS      │           │ Amazon    │ │ Amazon  │ │ Amazon │              │ Google Gemini   │
+│ (MySQL Engine)  │           │ DynamoDB  │ │ S3      │ │ SNS    │              │ 2.5 Flash API   │
+├─────────────────┤           ├───────────┤ ├─────────┤ ├────────┤              ├─────────────────┤
+│ • Users & Auth  │           │ • Live    │ │ • Image │ │ • Order│              │ • Smart Shopping│
+│ • Catalog Items │           │   Carts   │ │   Assets│ │   Alerts              │   Assistant     │
+│ • Orders History│           │ • Activity│ │ • S3 Pre│ │ • Email│              │ • Product Recs  │
+│ • Coupons/Review│           │   Logs    │ │   signed│ │   Push │              └─────────────────┘
+└─────────────────┘           └───────────┘ └─────────┘ └────┬───┘
+                                                             │
+                                                             ▼
+                                                    ┌─────────────────┐
+                                                    │ AWS Lambda      │
+                                                    │ Background Order│
+                                                    │ Worker Function │
+                                                    └─────────────────┘
 ```
 
 ---
 
-## 🚀 Architectural Components & AWS Services
+## 🔄 DevOps & CI/CD Pipeline Flow
 
-### 📦 1. DevOps & Container Deployment
-* **GitHub**: Source code management, triggering automated builds upon git push to `main`.
-* **AWS CodePipeline**: Automates the CI/CD pipeline lifecycle from code checkouts to live deployment.
-* **AWS CodeBuild**: Executes `buildspec.yml` to compile application code, build container images, run tests, and authenticate with ECR.
-* **Amazon ECR (Elastic Container Registry)**: Secure, private Docker container registry storing versioned image tags.
-* **Amazon ECS (Fargate)**: Serverless container compute engine running Docker containers without managing underlying EC2 instances.
+The repository supports dual automated deployment pipelines:
 
-### ⚡ 2. Application & Backend Services
-* **Node.js & Express API**: Core RESTful services handling routing, middleware, and business logic.
-* **Amazon DynamoDB**: High-performance NoSQL database for fast cart session storage and real-time state synchronization.
-* **Amazon RDS (MySQL)**: Scalable relational database for persistent user records, catalog items, and order transactions.
-* **Amazon S3**: Object storage for secure product asset management and image uploads.
-* **AWS Lambda & SNS**: Event-driven order processing pipeline with notification dispatch via SNS.
+### 1. AWS CodePipeline + AWS CodeBuild
+```text
+Git Push (main) ──► AWS CodePipeline ──► AWS CodeBuild (buildspec.yml) ──► Amazon ECR ──► Amazon EKS Rolling Deploy
+```
+
+### 2. Jenkins Pipeline (`Jenkinsfile`)
+```text
+Git Webhook ──► Jenkins Agent ──► Docker Build & Test ──► ECR Push ──► `kubectl apply` & Rollout Verification
+```
 
 ---
 
-## 🛠️ Repository Structure
+## 📁 Repository Structure
 
 ```text
 Super-Market-Website/
-├── backend/
-│   ├── config/            # AWS & DB configuration files
-│   ├── routes/            # REST API route handlers (cart, orders, products, upload)
-│   ├── services/          # DynamoDB, RDS, S3, & SNS service abstractions
-│   ├── lambdaHandler.js   # Serverless order processing handler
-│   ├── schema.sql         # Database initial schema
-│   └── server.js          # Main Express server entrypoint
-├── css/                   # Stylesheets
-├── js/                    # Client-side dynamic scripting & API integration
-├── k8s/                   # Kubernetes manifests (alternative deployment target)
-├── Dockerfile             # Multi-stage Docker container build definition
-├── buildspec.yml          # AWS CodeBuild configuration file
-└── README.md              # Project documentation
+├── backend/                       # Express.js REST API & Cloud Integrations
+│   ├── config/                    # DB connection pools & AWS clients
+│   ├── routes/                    # API Route controllers (auth, cart, orders, etc.)
+│   ├── services/                  # AWS Service SDK integrations (S3, DynamoDB, SNS, Lambda)
+│   ├── init_db.js                 # Database schema initializer and seed script
+│   ├── schema.sql                 # MySQL relational schema definition
+│   ├── server.js                  # Express application entrypoint
+│   └── README.md                  # Detailed Backend API Documentation
+│
+├── k8s/                           # Kubernetes / Amazon EKS Manifests
+│   ├── namespace.yaml             # Dedicated 'supermarket' namespace
+│   ├── configmap.yaml             # Non-sensitive runtime configuration
+│   ├── secret.yaml                # Encrypted secrets (DB passwords, API keys)
+│   ├── serviceaccount.yaml        # IAM Roles for Service Accounts (IRSA)
+│   ├── deployment.yaml            # 3-replica deployment with health probes
+│   ├── service.yaml               # ClusterIP internal service
+│   ├── ingress.yaml               # AWS ALB Ingress controller config
+│   └── README.md                  # Kubernetes Deployment Guide
+│
+├── supermarket-eks/               # Terraform Infrastructure as Code (IaC)
+│   ├── vpc.tf                     # 3-AZ Multi-tier VPC with NAT gateways
+│   ├── eks.tf                     # Managed EKS Cluster & Node Groups
+│   ├── rds.tf                     # RDS MySQL instance with automated subnetting
+│   ├── dynamodb.tf                # Serverless DynamoDB tables (Carts & Logs)
+│   ├── s3.tf                      # S3 bucket with CORS & public read policy
+│   ├── ecr.tf                     # Private container registry
+│   ├── iam.tf                     # IRSA, cluster, and CI/CD IAM policies
+│   ├── codepipeline.tf            # AWS CodePipeline CI/CD definition
+│   └── README.md                  # Terraform Provisioning Guide
+│
+├── css/                           # Modern responsive CSS design system
+├── js/                            # Frontend UI scripts & async API clients
+├── products/                      # Static product catalog assets
+├── Dockerfile                     # Multi-stage, production-hardened Dockerfile
+├── .dockerignore                  # Build context exclusion rules
+├── buildspec.yml                  # AWS CodeBuild instruction file
+├── Jenkinsfile                    # Jenkins CI/CD pipeline script
+└── README.md                      # Master repository documentation
 ```
 
 ---
 
-## ⚙️ CI/CD Buildspec Overview (`buildspec.yml`)
+## ⚡ Key Features
 
-The deployment process follows these execution phases in AWS CodeBuild:
-
-1. **Pre-Build**: Log in to Amazon ECR registry using AWS CLI and retrieve commit hash for tagging.
-2. **Build**: Build multi-stage Docker image using `Dockerfile` tagged with git commit SHA and `latest`.
-3. **Post-Build**: Push image tags to Amazon ECR and trigger Amazon ECS task definition update for zero-downtime rolling updates.
+* **Multi-Tier Persistence**:
+  * **Relational Data (Amazon RDS MySQL)**: Atomic order processing, user accounts, hashed passwords, product catalog, reviews.
+  * **NoSQL Data (Amazon DynamoDB)**: Real-time high-throughput shopping cart state and activity logging.
+  * **Object Storage (Amazon S3)**: Secure product media storage with direct client presigned URL uploads.
+* **Serverless Background Jobs (AWS Lambda & SNS)**:
+  * Asynchronous order fulfillment worker triggered upon checkout.
+  * Instant email/SMS order status alerts dispatched via Amazon SNS.
+* **AI Shopping Assistant**:
+  * Powered by **Google Gemini 2.5 Flash** (`@google/genai`) for real-time customer support, recipe recommendations, and semantic product discovery.
+* **Enterprise Kubernetes Operations**:
+  * Pod Anti-Affinity & Multi-AZ Topology Spread constraints.
+  * Native Zero-Downtime Rolling Updates (`maxSurge: 1, maxUnavailable: 0`).
+  * Kubernetes Startup, Liveness, and Readiness probes attached to `/health`.
+  * Non-root container security with AWS IAM Roles for Service Accounts (IRSA).
 
 ---
 
-## 🔧 Local Setup & Run
+## 🚀 Quick Start (Local Development)
 
-### Prerequisites
-* [Node.js v18+](https://nodejs.org/)
+### 1. Prerequisites
+* [Node.js 20+](https://nodejs.org/)
 * [Docker Desktop](https://www.docker.com/)
-* [AWS CLI](https://aws.amazon.com/cli/) (configured with IAM credentials)
+* [MySQL 8.0](https://www.mysql.com/) (or local Docker container)
 
-### Step-by-Step Instructions
+### 2. Clone & Install
+```bash
+git clone https://github.com/ajithkumar31082004-bit/Super-Market-Website.git
+cd Super-Market-Website
+npm install --prefix backend
+```
 
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/your-username/Super-Market-Website.git
-   cd Super-Market-Website
-   ```
+### 3. Setup Environment Variables
+Create `backend/.env`:
+```env
+PORT=5000
+NODE_ENV=development
 
-2. **Configure Environment Variables**
-   Create a `.env` file inside `backend/`:
-   ```env
-   PORT=5000
-   AWS_REGION=ap-south-1
-   AWS_ACCESS_KEY_ID=your-access-key
-   AWS_SECRET_ACCESS_KEY=your-secret-key
-   DYNAMODB_TABLE_CART=SuperMarketCart
-   S3_BUCKET_NAME=supermarket-assets
-   ```
+# MySQL RDS / Local Database
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASS=password
+DB_NAME=supermarket_db
 
-3. **Run Locally with Docker**
-   ```bash
-   docker build -t supermarket-app .
-   docker run -p 5000:5000 --env-file backend/.env supermarket-app
-   ```
-   Access application at `http://localhost:5000`.
+# Security
+JWT_SECRET=supermarket_jwt_secret_key_2026
+
+# Google Gemini AI
+GEMINI_API_KEY=your_gemini_api_key
+
+# AWS Services (Optional for full cloud integration)
+AWS_REGION=ap-south-1
+AWS_ACCESS_KEY_ID=your_aws_key
+AWS_SECRET_ACCESS_KEY=your_aws_secret
+AWS_S3_BUCKET_NAME=supermarket-product-images-unique
+AWS_DYNAMODB_CARTS_TABLE=SuperMarket_Carts
+AWS_DYNAMODB_LOGS_TABLE=SuperMarket_Logs
+AWS_SNS_TOPIC_ARN=arn:aws:sns:ap-south-1:xxx:SuperMarketOrderNotifications
+AWS_LAMBDA_BG_WORKER=supermarket-order-processor
+```
+
+### 4. Initialize Database
+```bash
+node backend/init_db.js
+```
+
+### 5. Run the Application
+```bash
+npm start --prefix backend
+```
+Open [http://localhost:5000](http://localhost:5000) in your browser.
+
+---
+
+## 🐳 Docker Deployment
+
+### Build the Image
+```bash
+docker build -t supermarket-pro:latest .
+```
+
+### Run the Container
+```bash
+docker run -d \
+  --name supermarket-app \
+  -p 5000:5000 \
+  --env-file backend/.env \
+  supermarket-pro:latest
+```
+
+Verify container health:
+```bash
+docker ps
+curl http://localhost:5000/health
+```
+
+---
+
+## 🚢 Production Deployment to Amazon EKS
+
+1. **Provision Infrastructure with Terraform**:
+   Follow instructions in [supermarket-eks/README.md](file:///c:/Users/ajith/Downloads/Super-Market-Website/supermarket-eks/README.md).
+
+2. **Deploy to EKS**:
+   Follow instructions in [k8s/README.md](file:///c:/Users/ajith/Downloads/Super-Market-Website/k8s/README.md).
+
+---
+
+## 📄 Documentation Links
+* 📦 **[Backend API & Cloud Services Guide](file:///c:/Users/ajith/Downloads/Super-Market-Website/backend/README.md)**
+* ☸️ **[Kubernetes & EKS Deployment Guide](file:///c:/Users/ajith/Downloads/Super-Market-Website/k8s/README.md)**
+* 🏗️ **[Terraform Infrastructure Guide](file:///c:/Users/ajith/Downloads/Super-Market-Website/supermarket-eks/README.md)**
 
 ---
 
 ## 📜 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
