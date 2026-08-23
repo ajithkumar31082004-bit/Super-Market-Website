@@ -5,7 +5,6 @@ pipeline {
         timeout(time: 30, unit: 'MINUTES')
         buildDiscarder(logRotator(numToKeepStr: '20', daysToKeepStr: '30'))
         timestamps()
-        ansiColor('xterm')
         disableConcurrentBuilds()
     }
 
@@ -72,9 +71,9 @@ pipeline {
         ECS_CONTAINER_NAME  = "${params.ECS_CONTAINER_NAME}"
         EKS_CLUSTER_NAME    = "${params.EKS_CLUSTER_NAME}"
         K8S_NAMESPACE       = "${params.K8S_NAMESPACE}"
-        IMAGE_TAG           = "${BUILD_NUMBER}-${GIT_COMMIT ? GIT_COMMIT.take(7) : 'latest'}"
+        IMAGE_TAG           = "${BUILD_NUMBER}"
         ECR_REGISTRY        = "${params.AWS_ACCOUNT_ID}.dkr.ecr.${params.AWS_REGION}.amazonaws.com"
-        FULL_IMAGE_NAME     = "${params.AWS_ACCOUNT_ID}.dkr.ecr.${params.AWS_REGION}.amazonaws.com/${params.ECR_REPOSITORY}:${BUILD_NUMBER}-${GIT_COMMIT ? GIT_COMMIT.take(7) : 'latest'}"
+        FULL_IMAGE_NAME     = "${params.AWS_ACCOUNT_ID}.dkr.ecr.${params.AWS_REGION}.amazonaws.com/${params.ECR_REPOSITORY}:${BUILD_NUMBER}"
         LATEST_IMAGE_NAME   = "${params.AWS_ACCOUNT_ID}.dkr.ecr.${params.AWS_REGION}.amazonaws.com/${params.ECR_REPOSITORY}:latest"
     }
 
