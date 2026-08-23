@@ -1,0 +1,45 @@
+version: 0.2
+
+env:
+  variables:
+    AWS_REGION: "ap-south-1"
+    AWS_ACCOUNT_ID: "131708658201"
+    ECR_REPOSITORY: "dev/super_market"
+    ECS_CLUSTER_NAME: "SuperMarketPROCIuster"
+    ECS_SERVICE_NAME: "supermarket-service"
+    CONTAINER_NAME: "supermarket-container"
+
+phases:
+  pre_build:
+    commands:
+      - echo "Logging in to Amazon ECR..."
+      - ECR_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+      - REPOSITORY_URI="${ECR_REGISTRY}/${ECR_REPOSITORY}"
+      - aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_COMMIT_ID | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:-latest}
+      - echo "Target Repository = ${REPOSITORY_URI}"
+      - echo "Image Tag = ${IMAGE_TAG}"
+
+  build:
+    commands:
+      - echo "Building Docker image..."
+      - docker build -t ${REPOSITORY_URI}:latest .
+      - docker tag ${REPOSITORY_URI}:latest ${REPOSITORY_URI}:${IMAGE_TAG}
+      - echo "Docker build complete."
+
+  post_build:
+    commands:
+      - echo "Pushing Docker images to Amazon ECR..."
+      - docker push ${REPOSITORY_URI}:latest
+      - docker push ${REPOSITORY_URI}:${IMAGE_TAG}
+      - echo "Generating imagedefinitions.json for Amazon ECS deployment..."
+      - printf '[{"name":"%s","imageUri":"%s"}]' ${CONTAINER_NAME} ${REPOSITORY_URI}:${IMAGE_TAG} > imagedefinitions.json
+      - cat imagedefinitions.json
+      - echo "Triggering ECS Service update..."
+      - aws ecs update-service --cluster ${ECS_CLUSTER_NAME} --service ${ECS_SERVICE_NAME} --force-new-deployment --region ${AWS_REGION} || echo "ECS service update command finished."
+
+artifacts:
+  files:
+    - imagedefinitions.json
+  name: SuperMarketECSArtifact
