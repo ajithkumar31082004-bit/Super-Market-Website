@@ -1,109 +1,127 @@
-cd:
-  name: Continuous Deployment
-  needs: ci
-  runs-on: ubuntu-latest
+name: SuperMarketPRO CI/CD
 
-  steps:
-    - name: Deploy to EC2 with rollback
-      uses: appleboy/ssh-action@v1.2.0
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-          set -e
+on:
+  push:
+    branches:
+      - main
 
-          cd ~/Super-Market-Website
+jobs:
+  ci:
+    name: Continuous Integration
+    runs-on: ubuntu-latest
 
-          IMAGE_NAME="supermarket-app"
-          NEW_IMAGE="${IMAGE_NAME}:${{ github.sha }}"
-          OLD_IMAGE="${IMAGE_NAME}:previous"
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
 
-          echo "================================"
-          echo "Pulling latest source code"
-          echo "================================"
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
 
-          git pull origin main
+      - name: Install backend dependencies
+        run: npm ci --prefix backend
 
-          echo "================================"
-          echo "Saving current image for rollback"
-          echo "================================"
+      - name: Check Node.js syntax
+        run: node --check backend/server.js
 
-          if docker image inspect ${IMAGE_NAME}:latest >/dev/null 2>&1; then
-            docker tag ${IMAGE_NAME}:latest ${OLD_IMAGE}
-          fi
+      - name: Build Docker image
+        run: docker build -t supermarket-app:${{ github.sha }} .
 
-          echo "================================"
-          echo "Building new Docker image"
-          echo "================================"
+  cd:
+    name: Continuous Deployment
+    needs: ci
+    runs-on: ubuntu-latest
 
-          docker build -t ${NEW_IMAGE} .
-          docker tag ${NEW_IMAGE} ${IMAGE_NAME}:latest
+    steps:
+      - name: Deploy to EC2 with rollback
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
 
-          echo "================================"
-          echo "Stopping old container"
-          echo "================================"
+            cd ~/Super-Market-Website
 
-          docker stop supermarket-app || true
-          docker rm supermarket-app || true
+            IMAGE_NAME="supermarket-app"
+            NEW_IMAGE="${IMAGE_NAME}:${{ github.sha }}"
+            OLD_IMAGE="${IMAGE_NAME}:previous"
 
-          echo "================================"
-          echo "Starting new container"
-          echo "================================"
+            echo "Pulling latest source code..."
+            git pull origin main
 
-          docker run -d \
-            --name supermarket-app \
-            --restart unless-stopped \
-            -p 5000:5000 \
-            ${NEW_IMAGE}
+            echo "Saving current image for rollback..."
 
-          echo "================================"
-          echo "Waiting for health check"
-          echo "================================"
+            if docker image inspect ${IMAGE_NAME}:latest >/dev/null 2>&1; then
+              docker tag ${IMAGE_NAME}:latest ${OLD_IMAGE}
+            fi
 
-          sleep 10
+            echo "Building new Docker image..."
 
-          echo "================================"
-          echo "Checking application health"
-          echo "================================"
+            docker build -t ${NEW_IMAGE} .
+            docker tag ${NEW_IMAGE} ${IMAGE_NAME}:latest
 
-          if curl --fail --silent http://localhost:5000/health; then
-            echo ""
-            echo "================================"
-            echo "DEPLOYMENT SUCCESSFUL ✅"
-            echo "================================"
-          else
-            echo ""
-            echo "================================"
-            echo "DEPLOYMENT FAILED ❌"
-            echo "Starting rollback..."
-            echo "================================"
-
-            docker logs supermarket-app || true
+            echo "Stopping old container..."
 
             docker stop supermarket-app || true
             docker rm supermarket-app || true
+
+            echo "Starting new container..."
 
             docker run -d \
               --name supermarket-app \
               --restart unless-stopped \
               -p 5000:5000 \
-              ${OLD_IMAGE}
+              ${NEW_IMAGE}
+
+            echo "Waiting for application..."
 
             sleep 10
 
-            curl --fail http://localhost:5000/health
+            echo "Running health check..."
 
-            echo ""
-            echo "================================"
-            echo "ROLLBACK SUCCESSFUL ✅"
-            echo "================================"
+            if curl --fail --silent http://localhost:5000/health; then
 
-            exit 1
-          fi
+              echo ""
+              echo "================================"
+              echo "DEPLOYMENT SUCCESSFUL"
+              echo "================================"
 
-          echo "================================"
-          echo "Running containers"
-          echo "================================"
+            else
 
-          docker ps
+              echo ""
+              echo "================================"
+              echo "DEPLOYMENT FAILED"
+              echo "Starting rollback..."
+              echo "================================"
+
+              docker logs supermarket-app || true
+
+              docker stop supermarket-app || true
+              docker rm supermarket-app || true
+
+              docker run -d \
+                --name supermarket-app \
+                --restart unless-stopped \
+                -p 5000:5000 \
+                ${OLD_IMAGE}
+
+              sleep 10
+
+              curl --fail http://localhost:5000/health
+
+              echo ""
+              echo "================================"
+              echo "ROLLBACK SUCCESSFUL"
+              echo "================================"
+
+              exit 1
+            fi
+
+            echo "Running containers..."
+
+            docker ps
