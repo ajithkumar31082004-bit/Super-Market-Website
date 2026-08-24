@@ -6,49 +6,99 @@ on:
       - main
 
 jobs:
-  deploy:
+  ci:
+    name: Continuous Integration
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout source code
         uses: actions/checkout@v4
 
-      - name: Test SSH connection
-        uses: appleboy/ssh-action@v1.2.0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            echo "Connected to EC2 successfully!"
-            hostname
-            docker --version
+          node-version: 20
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
 
-      - name: Deploy application
+      - name: Install backend dependencies
+        run: npm ci --prefix backend
+
+      - name: Check Node.js syntax
+        run: node --check backend/server.js
+
+      - name: Build Docker image
+        run: docker build -t supermarket-app:${{ github.sha }} .
+
+      - name: Run Trivy security scan
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: supermarket-app:${{ github.sha }}
+          format: table
+          exit-code: '1'
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH
+
+  cd:
+    name: Continuous Deployment
+    needs: ci
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            set -e
+
             cd ~/Super-Market-Website
 
-            echo "Pulling latest code..."
+            echo "================================"
+            echo "Pulling latest source code"
+            echo "================================"
+
             git pull origin main
 
-            echo "Stopping old container..."
+            echo "================================"
+            echo "Building Docker image"
+            echo "================================"
+
+            docker build -t supermarket-app:latest .
+
+            echo "================================"
+            echo "Stopping old container"
+            echo "================================"
+
             docker stop supermarket-app || true
             docker rm supermarket-app || true
 
-            echo "Building new Docker image..."
-            docker build -t supermarket-app .
+            echo "================================"
+            echo "Starting new container"
+            echo "================================"
 
-            echo "Starting new container..."
             docker run -d \
               --name supermarket-app \
-              -p 3000:3000 \
-              supermarket-app
+              --restart unless-stopped \
+              -p 5000:5000 \
+              supermarket-app:latest
 
-            echo "Deployment completed!"
+            echo "================================"
+            echo "Waiting for application"
+            echo "================================"
+
+            sleep 10
+
+            echo "================================"
+            echo "Health check"
+            echo "================================"
+
+            curl --fail http://localhost:5000/health
+
+            echo "================================"
+            echo "Deployment successful!"
+            echo "================================"
+
             docker ps
-            
