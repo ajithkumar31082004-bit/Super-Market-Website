@@ -27,6 +27,12 @@ jobs:
       - name: Check Node.js syntax
         run: node --check backend/server.js
 
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v6
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
       - name: Build Docker image
         run: docker build -t supermarket-app:${{ github.sha }} .
 
