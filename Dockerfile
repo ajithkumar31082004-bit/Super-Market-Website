@@ -1,7 +1,7 @@
 # ====================================================
 # Stage 1: Build Dependencies (with native compilation tools)
 # ====================================================
-FROM node:24-alpine AS dependencies
+FROM node:22-alpine AS dependencies
 
 WORKDIR /app
 
@@ -21,9 +21,13 @@ RUN npm ci --prefix backend --omit=dev
 # ====================================================
 # Stage 2: Production Runtime
 # ====================================================
-FROM node:24-alpine AS runner
+FROM node:22-alpine AS runner
 
 WORKDIR /app
+
+# Upgrade OS packages to apply security patches and remove unused package managers (npm, yarn) from runtime image
+RUN apk upgrade --no-cache && \
+    rm -rf /usr/local/lib/node_modules/npm /usr/local/bin/npm /usr/local/bin/npx /opt/yarn*
 
 # Set default production environment variables
 ENV NODE_ENV=production
