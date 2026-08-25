@@ -1,12 +1,9 @@
 # ====================================================
-# Stage 1: Build Dependencies (with native compilation tools)
+# Stage 1: Build Dependencies
 # ====================================================
 FROM node:22-alpine AS dependencies
 
 WORKDIR /app
-
-# Install build dependencies for native modules (e.g. bcrypt)
-RUN apk add --no-cache python3 make g++
 
 # Set production environment
 ENV NODE_ENV=production
