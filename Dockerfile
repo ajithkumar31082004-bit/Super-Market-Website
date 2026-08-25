@@ -1,7 +1,7 @@
 # ====================================================
 # Stage 1: Build Dependencies (with native compilation tools)
 # ====================================================
-FROM node:20-alpine AS dependencies
+FROM node:24-alpine AS dependencies
 
 WORKDIR /app
 
@@ -21,7 +21,7 @@ RUN npm ci --prefix backend --omit=dev
 # ====================================================
 # Stage 2: Production Runtime
 # ====================================================
-FROM node:20-alpine AS runner
+FROM node:24-alpine AS runner
 
 WORKDIR /app
 
